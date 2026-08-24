@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>AImagineThat — Agentic AI with Automation | Autonomous AI Agents for Business</title>
+  <meta name="description" content="Deploy autonomous AI agents that perceive, plan, act and verify — voice, chat, workflows, CRM and analytics on one agentic automation platform. Imagine it. Agents do it." />
+  <meta name="keywords" content="agentic AI, AI automation, autonomous AI agents, AI voice agents, workflow automation, business process automation, AI CRM, omnichannel AI" />
+  <link rel="canonical" href="https://aimaginethat.com/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#06070c" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aimaginethat.com/" />
+  <meta property="og:title" content="AImagineThat — Agentic AI with Automation" />
+  <meta property="og:description" content="Autonomous AI agents that run your revenue, support and operations end-to-end. Imagine it. Agents do it." />
+  <meta property="og:image" content="https://aimaginethat.com/assets/og-cover.png" />
+  <meta property="og:site_name" content="AImagineThat" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AImagineThat — Agentic AI with Automation" />
+  <meta name="twitter:description" content="Autonomous AI agents that run your revenue, support and operations end-to-end." />
+  <meta name="twitter:image" content="https://aimaginethat.com/assets/og-cover.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("aimt-theme");
+      if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://aimaginethat.com/#org",
+        "name": "AImagineThat",
+        "url": "https://aimaginethat.com/",
+        "logo": "https://aimaginethat.com/assets/og-cover.png",
+        "description": "Agentic AI with Automation — autonomous AI agents for revenue, support and operations.",
+        "sameAs": ["https://www.linkedin.com/company/aimaginethat", "https://twitter.com/aimaginethat"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://aimaginethat.com/#website",
+        "url": "https://aimaginethat.com/",
+        "name": "AImagineThat",
+        "publisher": { "@id": "https://aimaginethat.com/#org" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is agentic AI automation?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Agentic AI automation combines autonomous AI agents — systems that perceive context, plan multi-step actions, execute them across your tools, and verify outcomes — with end-to-end workflow automation, so entire business processes run without manual intervention." }
+          },
+          {
+            "@type": "Question",
+            "name": "How fast can we deploy an AI agent with AImagineThat?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Most teams launch their first production agent in under a week. Pre-built playbooks for sales, support and operations cut setup to hours, and our solutions engineers guide the rollout." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which channels and tools do AImagineThat agents work across?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Voice (PSTN and web), WhatsApp, Instagram, Messenger, LinkedIn, email and SMS — plus native integrations with CRMs like HubSpot and Salesforce, telephony providers, calendars, and 200+ business apps via API and webhooks." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is our data secure with AImagineThat?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The platform is built to ISO 27001 and SOC 2 aligned controls with GDPR and DPDP compliance, encryption in transit and at rest, role-based access, and configurable data residency." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do AI agents replace my team?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No — they absorb the repetitive 80% so your team focuses on judgment work. Agents hand off to humans instantly when conversations get complex, with full context transferred." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ======================= NAV ======================= -->
+  <header class="nav" id="top">
+
+    <div class="nav__inner container">
+      <a class="nav__brand" href="#top" aria-label="AImagineThat home">
+        <span class="nav__logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+            <ellipse cx="16.5" cy="12" rx="12.5" ry="10.8" fill="url(#lg)"/>
+            <circle cx="7.4" cy="25" r="2.5" fill="url(#lg)"/>
+            <circle cx="3.8" cy="29.4" r="1.4" fill="url(#lg)"/>
+            <path d="M16.5 4.8l1.9 5.3 5.3 1.9-5.3 1.9-1.9 5.3-1.9-5.3-5.3-1.9 5.3-1.9 1.9-5.3z" fill="#fff"/>
+            <defs><linearGradient id="lg" x1="4" y1="1" x2="29" y2="23"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+          </svg>
+        </span>
+        <span class="nav__wordmark"><em>AI</em>magine<span>That</span></span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#platform">Platform</a>
+        <a href="#loop">How it works</a>
+        <a href="#automations">Automations</a>
+        <a href="#services">Services</a>
+        <a href="#usecases">Use cases</a>
+        <a href="#industries">Industries</a>
+        <a href="#pricing">Pricing</a>
+        <a href="about.html">Company</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="theme-toggle" type="button" aria-label="Switch color theme">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <a class="btn btn--ghost" href="#contact">Talk to sales</a>
+        <a class="btn btn--primary" href="#contact">Book a demo <span aria-hidden="true">→</span></a>
+      </div>
+
+      <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__grid-bg" aria-hidden="true"></div>
+
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> AGENTIC AI &times; AUTOMATION</p>
+          <h1 id="hero-title">
+            Imagine it.<br />
+            <span class="grad-text">Agents do it.</span>
+          </h1>
+          <p class="hero__sub">
+            Your always-on AI team that <strong>answers every call, books appointments,
+            texts back missed calls and follows up with every lead</strong> — so nothing
+            slips through the cracks while you run your business.
+          </p>
+
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#contact">Book a live demo <span aria-hidden="true">→</span></a>
+            <a class="btn btn--outline btn--lg" href="#automations">See what it automates</a>
+          </div>
+
+          <dl class="hero__stats">
+            <div><dt class="stat-num" data-count="24" data-suffix="/7">24/7</dt><dd>Always on</dd></div>
+            <div><dt class="stat-num" data-count="30" data-prefix="&lt;" data-suffix="s">&lt;30s</dt><dd>Lead callback</dd></div>
+            <div><dt class="stat-num" data-count="40" data-prefix="+" data-suffix="%">+40%</dt><dd>More bookings</dd></div>
+            <div><dt class="stat-num" data-count="60" data-suffix="%">60%</dt><dd>Less admin work</dd></div>
+          </dl>
+
+          <p class="hero__compliance">
+            <span class="badge-mini">ISO 27001</span>
+            <span class="badge-mini">SOC 2 aligned</span>
+            <span class="badge-mini">GDPR · DPDP</span>
+          </p>
+        </div>
+
+        <!-- Customer-facing desktop app mockup -->
+        <div class="hero__console" role="img" aria-label="AImagineThat desktop dashboard showing calls answered, appointments booked and follow-ups sent for a small business">
+          <div class="appwin">
+            <div class="appwin__chrome">
+              <span class="appwin__dots"><i></i><i></i><i></i></span>
+              <span class="appwin__url">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                app.aimaginethat.com
+              </span>
+            </div>
+            <div class="appwin__layout">
+              <aside class="appwin__side">
+                <span class="appwin__brand">
+                  <svg viewBox="0 0 32 32" width="16" height="16" fill="none" aria-hidden="true"><ellipse cx="16.5" cy="12" rx="12.5" ry="10.8" fill="url(#lg2)"/><circle cx="7.4" cy="25" r="2.5" fill="url(#lg2)"/><circle cx="3.8" cy="29.4" r="1.4" fill="url(#lg2)"/><path d="M16.5 4.8l1.9 5.3 5.3 1.9-5.3 1.9-1.9 5.3-1.9-5.3-5.3-1.9 5.3-1.9 1.9-5.3z" fill="#fff"/><defs><linearGradient id="lg2" x1="4" y1="1" x2="29" y2="23"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+                  AImagineThat
+                </span>
+                <span class="appwin__navitem is-active">Dashboard</span>
+                <span class="appwin__navitem">Calls</span>
+                <span class="appwin__navitem">Appointments</span>
+                <span class="appwin__navitem">Messages</span>
+                <span class="appwin__navitem">Customers</span>
+                <span class="appwin__navitem">Reports</span>
+                <span class="appwin__side-foot"><span class="pulse-dot pulse-dot--green"></span> AI on duty</span>
+              </aside>
+              <div class="appwin__main">
+                <div class="appwin__head">
+                  <div>
+                    <b>Good morning, Riverside Dental</b>
+                    <span>Here's what your AI team handled today</span>
+                  </div>
+                  <span class="appwin__pill appwin__pill--green">0 missed calls</span>
+                </div>
+                <div class="appwin__stats">
+                  <div><b>38</b><span>Calls answered</span></div>
+                  <div><b>9</b><span>Appointments booked</span></div>
+                  <div><b>27</b><span>Follow-ups sent</span></div>
+                </div>
+                <div class="appwin__feed-label">TODAY'S ACTIVITY</div>
+                <div class="appwin__feed" id="agent-log" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero__float hero__float--1">
+            <span class="hero__float-label">APPOINTMENT BOOKED</span>
+            <span class="hero__float-value">Tue 2:30 PM · Maria S.</span>
+          </div>
+          <div class="hero__float hero__float--2">
+            <span class="hero__float-label">MISSED CALL RESCUED</span>
+            <span class="hero__float-value">Texted back in 8 seconds</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= TRUST STRIP ======================= -->
+    <section class="trust" aria-label="Technology partners">
+      <div class="container">
+        <p class="trust__label">POWERED BY THE WORLD'S BEST AI STACK</p>
+        <div class="trust__logos">
+          <span>OpenAI</span><span>Anthropic</span><span>Azure</span><span>AWS</span>
+          <span>ElevenLabs</span><span>Deepgram</span><span>Twilio</span><span>Meta</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= AGENTIC LOOP ======================= -->
+    <section class="section loop" id="loop" aria-labelledby="loop-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">THE AGENTIC LOOP</p>
+        <h2 class="section__title" id="loop-title">Not chatbots. <span class="grad-text">Autonomous operators.</span></h2>
+        <p class="section__sub">
+          Every AImagineThat agent runs a continuous loop — sensing context, reasoning over goals,
+          executing across your tools, and verifying every outcome before moving on.
+        </p>
+
+        <ol class="loop__steps">
+          <li class="loop__step reveal">
+            <span class="loop__num">01</span>
+            <span class="loop__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <h3>Perceive</h3>
+            <p>Ingests calls, messages, CRM records, webhooks and documents in real time — across every channel.</p>
+          </li>
+          <li class="loop__step reveal">
+            <span class="loop__num">02</span>
+            <span class="loop__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2.4"/><circle cx="19" cy="19" r="2.4"/><path d="M7.4 5H13a6 6 0 0 1 6 6v5.4"/></svg></span>
+            <h3>Plan</h3>
+            <p>Reasons over goals and guardrails to break the mission into concrete, ordered actions.</p>
+          </li>
+          <li class="loop__step reveal">
+            <span class="loop__num">03</span>
+            <span class="loop__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 11-13h-7l1-7z"/></svg></span>
+            <h3>Act</h3>
+            <p>Executes — makes the call, sends the quote, books the meeting, updates the pipeline.</p>
+          </li>
+          <li class="loop__step reveal">
+            <span class="loop__num">04</span>
+            <span class="loop__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"/><path d="m8.5 11.5 2.5 2.5 4.5-5"/></svg></span>
+            <h3>Verify</h3>
+            <p>Checks outcomes against intent. Retries, escalates to humans, or closes the loop.</p>
+          </li>
+          <li class="loop__step reveal">
+            <span class="loop__num">05</span>
+            <span class="loop__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+            <h3>Learn</h3>
+            <p>Every interaction sharpens the playbook — objections, timing, channel mix, tone.</p>
+          </li>
+        </ol>
+
+        <div class="loop__proof reveal">
+          <span class="chip chip--lg">100% prospect capture</span>
+          <span class="chip chip--lg">&lt;30s first response</span>
+          <span class="chip chip--lg">90-day automated follow-up</span>
+          <span class="chip chip--lg">Zero manual handoffs</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= PLATFORM ======================= -->
+    <section class="section platform" id="platform" aria-labelledby="platform-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">PLATFORM</p>
+        <h2 class="section__title" id="platform-title">One workspace. <span class="grad-text">Every mission.</span></h2>
+        <p class="section__sub">Six modules on one customer graph — purpose-built for teams that automate everything.</p>
+
+        <div class="platform__grid">
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=55&auto=format&fit=crop" alt="Team designing an AI assistant on a laptop" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">AGENT STUDIO</span>
+              <h3>Design agents in minutes.</h3>
+              <p>Pick a voice, add your business info and services, set the rules — your AI assistant is ready to take calls. No coding needed.</p>
+              <div class="card__flow">
+                <span>Your info</span><i>→</i><span>Pick a voice</span><i>→</i><span>Go live</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=800&q=55&auto=format&fit=crop" alt="Professional speaking on a phone call with a headset" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">VOICE AGENTS</span>
+              <h3>Calls that convert.</h3>
+              <p>Natural-sounding AI that answers instantly, handles questions, books the appointment — and passes hot callers straight to your team.</p>
+              <div class="card__stat-row">
+                <span><b>Instant</b> pickup</span>
+                <span><b>43.7%</b> answer rate</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800&q=55&auto=format&fit=crop" alt="Automated robotic process in motion" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">WORKFLOW AUTOMATION</span>
+              <h3>Busywork that runs itself.</h3>
+              <p>A missed call, a new lead, an unpaid invoice — anything can kick off an automation that finishes the job without you touching it.</p>
+              <div class="card__flow">
+                <span>Lead in</span><i>→</i><span>AI call</span><i>→</i><span>Quote sent</span><i>→</i><span>Deal tracked</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=55&auto=format&fit=crop" alt="Smartphone showing social media and messaging apps" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">EVERY CHANNEL</span>
+              <h3>One inbox for everything.</h3>
+              <p>Phone, text, WhatsApp, Instagram, Facebook and email — every customer conversation lands in one place, with full history attached.</p>
+              <div class="card__flow card__flow--wrap">
+                <span>Voice</span><span>Text</span><span>WhatsApp</span><span>Instagram</span><span>Email</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=55&auto=format&fit=crop" alt="Sales team reviewing their customer pipeline together" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">CUSTOMERS &amp; LEADS</span>
+              <h3>A pipeline that organizes itself.</h3>
+              <p>Every lead is captured, labeled Hot / Warm / Cold, and followed up automatically — with quotes, notes and history in one view.</p>
+              <div class="card__pipeline">
+                <span class="pill pill--new">NEW 12</span>
+                <span class="pill pill--hot">HOT 8</span>
+                <span class="pill pill--won">WON 3</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--media reveal">
+            <figure class="card__media"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=55&auto=format&fit=crop" alt="Business performance dashboard with clear charts" loading="lazy" width="800" height="450" /></figure>
+            <div class="card__body">
+              <span class="card__tag">REPORTS &amp; INSIGHTS</span>
+              <h3>Know what's working.</h3>
+              <p>Calls, bookings, reviews and revenue — a plain-English daily summary in your inbox, plus dashboards when you want the detail.</p>
+              <div class="card__stat-row">
+                <span><b>Daily</b> summary email</span>
+                <span><b>Live</b> dashboard</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= SERVICES ======================= -->
+    <section class="section services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">SERVICES</p>
+        <h2 class="section__title" id="services-title">End-to-end <span class="grad-text">automation services.</span></h2>
+        <p class="section__sub">7 service categories · 90+ specialized offerings — from AI voice to full business-process automation.</p>
+
+        <div class="services__grid">
+          <div class="svc reveal">
+            <h3>AI Automation <span class="svc__count">20</span></h3>
+            <ul>
+              <li>AI Voice Assistant</li><li>AI Receptionist</li><li>AI Phone Answering</li>
+              <li>AI Call Routing</li><li>AI Appointment Scheduling</li><li>AI Lead Qualification</li>
+            </ul>
+          </div>
+          <div class="svc reveal">
+            <h3>Business Process Automation <span class="svc__count">16</span></h3>
+            <ul>
+              <li>Workflow Automation</li><li>CRM Automation</li><li>Sales Process Automation</li>
+              <li>Marketing Automation</li><li>Customer Service Automation</li><li>Document Processing</li>
+            </ul>
+          </div>
+          <div class="svc reveal">
+            <h3>CRM &amp; Sales Automation <span class="svc__count">9</span></h3>
+            <ul>
+              <li>CRM Integration &amp; Management</li><li>Lead Capture &amp; Qualification</li><li>Sales Pipeline Automation</li>
+              <li>Customer Journey Automation</li><li>Opportunity Management</li><li>Quote Automation</li>
+            </ul>
+          </div>
+          <div class="svc reveal">
+            <h3>Customer Experience <span class="svc__count">7</span></h3>
+            <ul>
+              <li>Omnichannel Support</li><li>Live Chat Support</li><li>Ticket Management</li>
+              <li>Customer Onboarding</li><li>Retention Automation</li><li>Help Desk Support</li>
+            </ul>
+          </div>
+          <div class="svc reveal">
+            <h3>AI &amp; Analytics <span class="svc__count">7</span></h3>
+            <ul>
+              <li>AI Business Intelligence</li><li>Conversational AI</li><li>Analytics Dashboards</li>
+              <li>Call Analytics &amp; Transcription</li><li>Conversation Intelligence</li><li>Sentiment Analysis</li>
+            </ul>
+          </div>
+          <div class="svc reveal">
+            <h3>Industry Solutions <span class="svc__count">12</span></h3>
+            <ul>
+              <li>Real Estate AI</li><li>Insurance AI</li><li>Healthcare AI</li>
+              <li>Legal Firm AI</li><li>Travel Agency AI</li><li>Automotive AI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= USE CASES ======================= -->
+    <section class="section usecases" id="usecases" aria-labelledby="usecases-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">USE CASES</p>
+        <h2 class="section__title" id="usecases-title">Built for teams that <span class="grad-text">refuse to lose.</span></h2>
+        <p class="section__sub">Drop-in agentic workflows for the motions that move pipeline.</p>
+
+        <div class="usecases__grid">
+          <article class="ucard reveal">
+            <figure class="ucard__media">
+              <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=900&q=60&auto=format&fit=crop" alt="Sales team collaborating on outbound campaigns" loading="lazy" width="900" height="506" />
+              <figcaption class="ucard__label">OUTBOUND SALES</figcaption>
+            </figure>
+            <div class="ucard__body">
+              <h3>Bulk campaigns, intelligent retries.</h3>
+              <p>CSV / Sheets campaigns with intelligent retries, Hot-Normal-Cold scoring and 3-strike dead-lead revival.</p>
+              <div class="ucard__metrics">
+                <span><b>3×</b> more dials</span><span><b>45%</b> conversion</span><span><b>90%</b> reach rate</span>
+              </div>
+            </div>
+          </article>
+          <article class="ucard reveal">
+            <figure class="ucard__media">
+              <img src="https://images.unsplash.com/photo-1587560699334-cc4ff634909a?w=900&q=60&auto=format&fit=crop" alt="Customer service professional wearing a headset" loading="lazy" width="900" height="506" />
+              <figcaption class="ucard__label">CUSTOMER SERVICE</figcaption>
+            </figure>
+            <div class="ucard__body">
+              <h3>Resolve faster, escalate smarter.</h3>
+              <p>Voice + social inbox with full CRM context, auto sentiment, transcripts, and smart escalation to humans.</p>
+              <div class="ucard__metrics">
+                <span><b>24/7</b> coverage</span><span><b>80%</b> cost cut</span><span><b>0</b> lost tickets</span>
+              </div>
+            </div>
+          </article>
+          <article class="ucard reveal">
+            <figure class="ucard__media">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=60&auto=format&fit=crop" alt="Analytics dashboard showing lead conversion metrics" loading="lazy" width="900" height="506" />
+              <figcaption class="ucard__label">LEAD RESPONSE</figcaption>
+            </figure>
+            <div class="ucard__body">
+              <h3>Every lead, answered in seconds.</h3>
+              <p>Every inbound — web, social, campaign — called back in under 30 seconds, qualified and booked while intent is hot.</p>
+              <div class="ucard__metrics">
+                <span><b>&lt;30s</b> response</span><span><b>100%</b> capture</span><span><b>+40%</b> conversion</span>
+              </div>
+            </div>
+          </article>
+          <article class="ucard reveal">
+            <figure class="ucard__media">
+              <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=900&q=60&auto=format&fit=crop" alt="Recruiter shaking hands with a candidate" loading="lazy" width="900" height="506" />
+              <figcaption class="ucard__label">AI RECRUITMENT</figcaption>
+            </figure>
+            <div class="ucard__body">
+              <h3>Screen at scale, hire on signal.</h3>
+              <p>Voice screening at scale, KB-scored candidates, and auto-pushed shortlists straight into your ATS pipeline.</p>
+              <div class="ucard__metrics">
+                <span><b>5×</b> screening</span><span><b>75%</b> time saved</span><span><b>100%</b> coverage</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= INDUSTRIES ======================= -->
+    <section class="section industries" id="industries" aria-labelledby="industries-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">INDUSTRIES</p>
+        <h2 class="section__title" id="industries-title">Tuned for <span class="grad-text">every vertical.</span></h2>
+        <p class="section__sub">Domain-aware agents, workflows and integrations — out of the box.</p>
+
+        <div class="industries__grid">
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Healthcare</b><i>Appointment-grade reliability</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>BFSI</b><i>KYC-aware conversations</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>E-commerce</b><i>Recover abandoned carts</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Insurance</b><i>Claims that close themselves</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Real Estate</b><i>Qualify buyers before sundown</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Telecom</b><i>Provision &amp; resolve in one call</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Travel</b><i>Concierge for every time zone</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Education</b><i>Admissions that never sleep</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Retail</b><i>Store-level intelligence</i></span></a>
+          <a class="ind reveal" href="#contact"><img class="ind__img" src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=55&auto=format&fit=crop" alt="" loading="lazy" width="500" height="333" /><span class="ind__body"><b>Legal</b><i>Intake without the wait</i></span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= INTEGRATIONS ======================= -->
+    <section class="section integrations" aria-labelledby="integrations-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">INTEGRATIONS</p>
+        <h2 class="section__title" id="integrations-title">Plug in. <span class="grad-text">Ship today.</span></h2>
+        <p class="section__sub">OAuth into telephony, messaging, CRMs and LLMs — wire webhooks in minutes.</p>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          <span>Twilio</span><span>Vonage</span><span>Plivo</span><span>Meta</span><span>LinkedIn</span>
+          <span>ElevenLabs</span><span>OpenAI</span><span>Deepgram</span><span>Anthropic</span><span>Gemini</span>
+          <span>Azure</span><span>HubSpot</span><span>Salesforce</span><span>Zapier</span><span>Google Sheets</span>
+          <span>Twilio</span><span>Vonage</span><span>Plivo</span><span>Meta</span><span>LinkedIn</span>
+          <span>ElevenLabs</span><span>OpenAI</span><span>Deepgram</span><span>Anthropic</span><span>Gemini</span>
+          <span>Azure</span><span>HubSpot</span><span>Salesforce</span><span>Zapier</span><span>Google Sheets</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= PROOF / TESTIMONIALS ======================= -->
+    <section class="section proof" aria-labelledby="proof-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">CUSTOMER VOICE</p>
+        <h2 class="section__title" id="proof-title">Trusted by teams that <span class="grad-text">measure every minute.</span></h2>
+
+        <div class="proof__stats">
+          <div class="reveal"><b class="stat-num" data-count="98" data-suffix="%">98%</b><span>CSAT post-launch</span></div>
+          <div class="reveal"><b class="stat-num" data-count="24" data-prefix="&lt;" data-suffix="h">&lt;24h</b><span>Time to deploy</span></div>
+          <div class="reveal"><b class="stat-num" data-count="4.9">4.9</b><span>Avg buyer rating</span></div>
+          <div class="reveal"><b class="stat-num" data-count="60" data-suffix="%">60%</b><span>Cost reduction</span></div>
+        </div>
+
+        <div class="proof__grid">
+          <blockquote class="quote reveal">
+            <p>"It feels like we've added a smart sales assistant that works 24/7 — prospect conversions have noticeably improved across Indian and overseas clients."</p>
+            <footer><b>CEO</b> · Real Estate Firm · NRI &amp; Indian Market</footer>
+          </blockquote>
+          <blockquote class="quote reveal">
+            <p>"Agentic AI manages most of our trip inquiries and sponsorship requests. Instant answers, responsive across time zones — a total game changer."</p>
+            <footer><b>Owner</b> · Travel &amp; Events Firm · USA</footer>
+          </blockquote>
+          <blockquote class="quote reveal">
+            <p>"Appointments and patient queries are handled end-to-end. Efficient, polite, reliable — our front desk can finally focus on in-clinic care."</p>
+            <footer><b>Physician &amp; Owner</b> · Multi-Specialty Hospital</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= PRICING ======================= -->
+    <section class="section pricing" id="pricing" aria-labelledby="pricing-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">PRICING</p>
+        <h2 class="section__title" id="pricing-title">Start small. <span class="grad-text">Scale infinitely.</span></h2>
+        <p class="section__sub">Transparent plans that grow with your automation. All plans include the full agentic platform.</p>
+
+        <div class="pricing__grid">
+          <article class="price reveal">
+            <h3>Launch</h3>
+            <p class="price__for">For teams shipping their first agent</p>
+            <p class="price__amount">$499<span>/mo</span></p>
+            <ul>
+              <li>1 production AI agent</li>
+              <li>1,000 voice minutes / mo</li>
+              <li>3 channels (voice, WhatsApp, email)</li>
+              <li>CRM with auto-scoring</li>
+              <li>Email support</li>
+            </ul>
+            <a class="btn btn--outline btn--block" href="#contact">Start with Launch</a>
+          </article>
+
+          <article class="price price--featured reveal">
+            <span class="price__badge">MOST POPULAR</span>
+            <h3>Scale</h3>
+            <p class="price__for">For revenue teams automating end-to-end</p>
+            <p class="price__amount">$1,999<span>/mo</span></p>
+            <ul>
+              <li>5 production AI agents</li>
+              <li>10,000 voice minutes / mo</li>
+              <li>All 6 channels + omnichannel inbox</li>
+              <li>Bulk campaigns &amp; workflow automation</li>
+              <li>Analytics + conversation intelligence</li>
+              <li>Priority support · dedicated CSM</li>
+            </ul>
+            <a class="btn btn--primary btn--block" href="#contact">Book a demo</a>
+          </article>
+
+          <article class="price reveal">
+            <h3>Enterprise</h3>
+            <p class="price__for">For orgs with custom compliance &amp; scale</p>
+            <p class="price__amount">Custom</p>
+            <ul>
+              <li>Unlimited agents &amp; channels</li>
+              <li>Custom volume &amp; concurrency</li>
+              <li>SSO, RBAC, audit logs</li>
+              <li>Data residency &amp; private deployment</li>
+              <li>MSA / NDA · solutions engineering</li>
+              <li>24/7 SLA-backed support</li>
+            </ul>
+            <a class="btn btn--outline btn--block" href="#contact">Talk to sales</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= FAQ ======================= -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container container--narrow">
+        <p class="eyebrow eyebrow--center">FAQ</p>
+        <h2 class="section__title" id="faq-title">Questions, <span class="grad-text">answered.</span></h2>
+
+        <div class="faq__list">
+          <details class="faq__item reveal">
+            <summary>What is agentic AI automation?</summary>
+            <p>Agentic AI automation combines autonomous AI agents — systems that perceive context, plan multi-step actions, execute across your tools, and verify outcomes — with end-to-end workflow automation. Entire business processes run without manual intervention.</p>
+          </details>
+          <details class="faq__item reveal">
+            <summary>How fast can we deploy our first agent?</summary>
+            <p>Most teams launch a production agent in under a week. Pre-built playbooks for sales, support and operations cut setup to hours, and our solutions engineers guide the rollout end-to-end.</p>
+          </details>
+          <details class="faq__item reveal">
+            <summary>Which channels and tools do agents work across?</summary>
+            <p>Voice (PSTN &amp; web), WhatsApp, Instagram, Messenger, LinkedIn, email and SMS — plus native integrations with HubSpot, Salesforce, telephony providers, calendars, and 200+ apps via API and webhooks.</p>
+          </details>
+          <details class="faq__item reveal">
+            <summary>Is our data secure?</summary>
+            <p>Yes. ISO 27001 and SOC 2 aligned controls, GDPR and DPDP compliance, encryption in transit and at rest, role-based access, and configurable data residency.</p>
+          </details>
+          <details class="faq__item reveal">
+            <summary>Do AI agents replace my team?</summary>
+            <p>No — they absorb the repetitive 80% so your team focuses on judgment work. Agents hand off to humans instantly when conversations get complex, with full context transferred in under two seconds.</p>
+          </details>
+          <details class="faq__item reveal">
+            <summary>What does implementation look like?</summary>
+            <p>Week 1: discovery + agent design. Week 2: sandbox with your knowledge base and tools. Week 3: supervised production with live monitoring. Then full autonomy with human-in-the-loop guardrails you control.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= CONTACT / FINAL CTA ======================= -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact__glow" aria-hidden="true"></div>
+      <div class="container contact__inner">
+        <div class="contact__copy">
+          <p class="eyebrow">READY WHEN YOU ARE</p>
+          <h2 class="section__title section__title--left" id="contact-title">
+            Ship your first AI agent <span class="grad-text">this week.</span>
+          </h2>
+          <p>Tell us about your pipeline. A solutions engineer replies within one business day with a free 30-minute architecture review and sandbox access.</p>
+
+          <ul class="contact__perks">
+            <li>✓ Free 30-minute architecture review</li>
+            <li>✓ Sandbox access — voice + CRM</li>
+            <li>✓ Production rollout playbook</li>
+          </ul>
+
+          <div class="contact__meta">
+            <p><b>Email</b> · <a href="mailto:hello@aimaginethat.com">hello@aimaginethat.com</a></p>
+            <p><b>Reply time</b> · &lt; 4 business hours</p>
+            <p><b>Ready</b> · MSA / NDA · US &amp; EU data residency</p>
+          </div>
+        </div>
+
+        <form class="contact__form" action="#" method="post" novalidate>
+          <div class="form__row">
+            <label>Full name<input type="text" name="name" autocomplete="name" required placeholder="Ada Lovelace" /></label>
+            <label>Work email<input type="email" name="email" autocomplete="email" required placeholder="ada@company.com" /></label>
+          </div>
+          <div class="form__row">
+            <label>Company<input type="text" name="company" autocomplete="organization" placeholder="Company Inc." /></label>
+            <label>Monthly volume
+              <select name="volume">
+                <option value="">Expected volume</option>
+                <option>&lt; 1,000 interactions</option>
+                <option>1,000 – 10,000</option>
+                <option>10,000 – 100,000</option>
+                <option>100,000+</option>
+              </select>
+            </label>
+          </div>
+          <label>What do you want to automate?<textarea name="message" rows="4" placeholder="e.g. inbound lead calls, appointment booking, support triage…"></textarea></label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Send inquiry <span aria-hidden="true">→</span></button>
+          <p class="form__note">By submitting, you agree to our <a href="#">Privacy Policy</a>. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a class="nav__brand" href="#top" aria-label="AImagineThat home">
+          <span class="nav__wordmark"><em>AI</em>magine<span>That</span></span>
+        </a>
+        <p>Agentic AI with Automation — autonomous agents for revenue, support and operations. Imagine it. Agents do it.</p>
+        <p class="footer__compliance">ISO 27001 · SOC 2 aligned · GDPR · DPDP</p>
+      </div>
+      <nav class="footer__cols" aria-label="Footer">
+        <div>
+          <h4>Product</h4>
+          <a href="#platform">Platform</a>
+          <a href="#loop">How it works</a>
+          <a href="#usecases">Use cases</a>
+          <a href="#industries">Industries</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="about.html#mission">Mission</a>
+          <a href="about.html#vision">Vision</a>
+          <a href="#contact">Contact</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div>
+          <h4>Status</h4>
+          <p class="footer__status"><span class="pulse-dot pulse-dot--green"></span> All systems operational</p>
+        </div>
+      </nav>
+    </div>
+    <div class="container footer__bottom">
+      <p>© 2026 AImagineThat · aimaginethat.com</p>
+      <p><a href="https://www.linkedin.com/">LinkedIn</a> · <a href="https://twitter.com/">Twitter</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

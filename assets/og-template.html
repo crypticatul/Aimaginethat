@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px;
+    background: #06070c;
+    font-family: "Space Grotesk", sans-serif;
+    color: #eef0f6;
+    overflow: hidden;
+    position: relative;
+  }
+  .glow {
+    position: absolute;
+    top: -260px; left: 50%;
+    transform: translateX(-50%);
+    width: 1100px; height: 800px;
+    background: radial-gradient(ellipse at center, rgba(124,92,255,.28), rgba(34,211,238,.1) 45%, transparent 70%);
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 85% 70% at 50% 30%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 30%, #000 30%, transparent 78%);
+  }
+  .wrap {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 30px;
+    padding: 0 90px;
+  }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand svg { width: 74px; height: 74px; }
+  .wordmark { font-size: 46px; font-weight: 700; letter-spacing: -0.02em; }
+  .wordmark em {
+    font-style: normal;
+    background: linear-gradient(120deg, #7c5cff, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .wordmark span { color: #9aa1b5; }
+  h1 {
+    font-size: 78px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  h1 .grad {
+    background: linear-gradient(120deg, #7c5cff, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    font-family: "Inter", sans-serif;
+    font-size: 27px;
+    color: #9aa1b5;
+    font-weight: 400;
+  }
+  .chips { display: flex; gap: 14px; margin-top: 6px; }
+  .chip {
+    font-family: "Inter", sans-serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: #c9cede;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 999px;
+    padding: 10px 26px;
+    background: rgba(255,255,255,.04);
+  }
+  .domain {
+    position: absolute;
+    bottom: 36px; left: 0; right: 0;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 21px;
+    color: #5d6478;
+    letter-spacing: .04em;
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="grid"></div>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none">
+        <ellipse cx="16.5" cy="12" rx="12.5" ry="10.8" fill="url(#g)"/>
+        <circle cx="7.4" cy="25" r="2.5" fill="url(#g)"/>
+        <circle cx="3.8" cy="29.4" r="1.4" fill="url(#g)"/>
+        <path d="M16.5 4.8l1.9 5.3 5.3 1.9-5.3 1.9-1.9 5.3-1.9-5.3-5.3-1.9 5.3-1.9 1.9-5.3z" fill="#fff"/>
+        <defs><linearGradient id="g" x1="4" y1="1" x2="29" y2="23"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+      </svg>
+      <div class="wordmark"><em>AI</em>magine<span>That</span></div>
+    </div>
+    <h1>Imagine it.<br /><span class="grad">Agents do it.</span></h1>
+    <p class="sub">Your always-on AI team — answers calls, books appointments, follows up with every lead.</p>
+    <div class="chips">
+      <span class="chip">Agentic AI</span>
+      <span class="chip">Automation</span>
+      <span class="chip">24/7</span>
+    </div>
+  </div>
+  <p class="domain">aimaginethat.com</p>
+</body>
+</html>
