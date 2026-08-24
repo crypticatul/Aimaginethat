@@ -58,16 +58,16 @@
   const log = document.getElementById("agent-log");
   if (log) {
     const script = [
-      { t: "9:41 AM", dot: "green", title: "Answered call from Maria S.", sub: "Booked a cleaning · Tue 2:30 PM" },
-      { t: "9:48 AM", dot: "blue", title: "Missed call rescued", sub: "Texted John back within 8 seconds" },
-      { t: "10:02 AM", dot: "violet", title: "New lead from your website", sub: "Called back in 22 seconds · quote requested" },
-      { t: "10:15 AM", dot: "green", title: "Appointment reminder sent", sub: "3 patients confirmed for tomorrow" },
-      { t: "10:31 AM", dot: "amber", title: "Review request sent", sub: "Sarah left you 5 stars on Google" },
-      { t: "10:47 AM", dot: "blue", title: "Rescheduled Mike T.", sub: "Moved Thursday 4 PM → Friday 11 AM" },
-      { t: "11:03 AM", dot: "violet", title: "Follow-up sequence started", sub: "Day 1 of 7 · new patient welcome" },
-      { t: "11:20 AM", dot: "green", title: "Invoice reminder sent", sub: "Payment link texted to 2 customers" },
-      { t: "11:38 AM", dot: "blue", title: "After-hours call handled", sub: "Emergency triaged · Dr. Lee notified" },
-      { t: "11:52 AM", dot: "green", title: "Insurance question answered", sub: "Coverage confirmed from your FAQ" },
+      { t: "9:41 AM", dot: "green", title: "Lead moved to Hot", sub: "AI triage scored Riverside Dental at 91" },
+      { t: "9:48 AM", dot: "blue", title: "Deal Coach updated", sub: "Summary, sentiment and risks refreshed" },
+      { t: "10:02 AM", dot: "violet", title: "Follow-up drafted", sub: "Smart Compose created email for Acme Labs" },
+      { t: "10:15 AM", dot: "green", title: "Task auto-created", sub: "Call back owner by 4 PM for Deal #D-219" },
+      { t: "10:31 AM", dot: "amber", title: "Quote sent", sub: "3 line items shared with MedPrime LLC" },
+      { t: "10:47 AM", dot: "blue", title: "Stage advanced", sub: "Deal #D-184 moved Proposal → Negotiation" },
+      { t: "11:03 AM", dot: "violet", title: "Workflow executed", sub: "Lead routing automation run completed" },
+      { t: "11:20 AM", dot: "green", title: "Payment status updated", sub: "Invoice INV-882 marked collected" },
+      { t: "11:38 AM", dot: "blue", title: "Copilot answered", sub: "Top 3 at-risk deals surfaced for review" },
+      { t: "11:52 AM", dot: "green", title: "Pipeline digest generated", sub: "Weekly summary shared with team lead" },
     ];
 
     const MAX_ITEMS = 5;
