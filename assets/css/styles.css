@@ -267,6 +267,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   transform: translateX(-50%);
   width: 900px; height: 700px;
   background: var(--glow-hero);
+  animation: hero-glow 9s ease-in-out infinite alternate;
   pointer-events: none;
 }
 .hero__grid-bg {
@@ -275,6 +276,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
+  animation: hero-grid 18s linear infinite;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   pointer-events: none;
@@ -326,6 +328,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__copy > *:nth-child(6) { animation-delay: 0.36s; }
 .hero__console { animation: rise 0.7s var(--ease-out-quint) 0.25s both; }
 
+@keyframes hero-glow {
+  from { opacity: 0.75; transform: translateX(-50%) scale(0.98); }
+  to { opacity: 1; transform: translateX(-50%) scale(1.04); }
+}
+
+@keyframes hero-grid {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 56px 28px, 28px 56px; }
+}
+
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
 /* Desktop app mockup (always light — reads as a real product screen) */
 .hero__console { position: relative; }
 .appwin {
@@ -335,6 +352,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   overflow: hidden;
   box-shadow: var(--shadow-glow), 0 24px 60px rgba(0, 0, 0, 0.28);
   font-family: var(--font-body);
+  animation: hero-float 7s ease-in-out infinite;
 }
 .appwin__chrome {
   display: flex;
@@ -517,6 +535,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__float-value { font-size: 13px; font-weight: 600; color: #12151f; }
 .hero__float--1 { top: -22px; right: -14px; }
 .hero__float--2 { bottom: -20px; left: -18px; }
+.hero__float--1 { animation: hero-float 6.5s ease-in-out infinite; }
+.hero__float--2 { animation: hero-float 7.8s ease-in-out infinite reverse; }
 
 /* ============================================================
    TRUST STRIP
@@ -550,7 +570,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
    ============================================================ */
 .loop__steps {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
   counter-reset: step;
   margin-bottom: 48px;
@@ -609,6 +629,31 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .card:hover {
   border-color: var(--border-strong);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+.card--media {
+  padding: 0;
+  overflow: hidden;
+}
+.card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88);
+  transition: transform 0.6s var(--ease-out-quart);
+}
+.card:hover .card__media img { transform: scale(1.04); }
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 24px 26px;
+  flex: 1;
 }
 .card__tag {
   font-family: var(--font-mono);
