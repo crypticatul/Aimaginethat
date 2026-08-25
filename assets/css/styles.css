@@ -6,16 +6,16 @@
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #06070c;
-  --bg-raise: #0b0d16;
+  --bg: #060c1a;
+  --bg-raise: #0b1328;
   --bg-card: rgba(255, 255, 255, 0.03);
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
   --text: #eef0f6;
   --text-dim: #9aa1b5;
   --text-faint: #5d6478;
-  --violet: #7c5cff;
-  --cyan: #22d3ee;
+  --violet: #3b82f6;
+  --cyan: #06b6d4;
   --green: #34d399;
   --hot: #fb7185;
   --grad: linear-gradient(120deg, var(--violet), var(--cyan));
@@ -25,41 +25,41 @@
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --container: 1200px;
-  --shadow-glow: 0 0 60px rgba(124, 92, 255, 0.25);
+  --shadow-glow: 0 0 60px rgba(59, 130, 246, 0.24);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --nav-bg: rgba(6, 7, 12, 0.72);
+  --nav-bg: rgba(6, 12, 26, 0.75);
   --input-bg: rgba(0, 0, 0, 0.35);
   --code-bg: rgba(0, 0, 0, 0.4);
   --btn-primary-text: #0a0a14;
-  --glow-hero: radial-gradient(ellipse at center, rgba(124, 92, 255, 0.22), rgba(34, 211, 238, 0.08) 45%, transparent 70%);
-  --glow-contact: radial-gradient(ellipse at center, rgba(124, 92, 255, 0.16), transparent 65%);
+  --glow-hero: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.22), rgba(6, 182, 212, 0.1) 45%, transparent 70%);
+  --glow-contact: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.16), transparent 65%);
   --grid-line: rgba(255, 255, 255, 0.025);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #f7f8fc;
-  --bg-raise: #eef0f8;
+  --bg: #f4f8ff;
+  --bg-raise: #eaf1ff;
   --bg-card: #ffffff;
-  --border: rgba(15, 20, 45, 0.1);
-  --border-strong: rgba(15, 20, 45, 0.18);
-  --text: #12151f;
-  --text-dim: #4b5268;
-  --text-faint: #7d8499;
-  --violet: #6247d9;
-  --cyan: #0891b2;
+  --border: rgba(20, 51, 108, 0.12);
+  --border-strong: rgba(20, 51, 108, 0.24);
+  --text: #0d1a36;
+  --text-dim: #34507a;
+  --text-faint: #5b7297;
+  --violet: #1d4ed8;
+  --cyan: #0284c7;
   --green: #059669;
   --hot: #e11d48;
-  --shadow-glow: 0 0 60px rgba(98, 71, 217, 0.14);
-  --nav-bg: rgba(247, 248, 252, 0.8);
+  --shadow-glow: 0 0 56px rgba(29, 78, 216, 0.12);
+  --nav-bg: rgba(244, 248, 255, 0.88);
   --input-bg: rgba(15, 20, 45, 0.04);
   --code-bg: #0b0d16;
   --btn-primary-text: #ffffff;
-  --glow-hero: radial-gradient(ellipse at center, rgba(98, 71, 217, 0.12), rgba(8, 145, 178, 0.05) 45%, transparent 70%);
-  --glow-contact: radial-gradient(ellipse at center, rgba(98, 71, 217, 0.08), transparent 65%);
-  --grid-line: rgba(15, 20, 45, 0.045);
+  --glow-hero: radial-gradient(ellipse at center, rgba(29, 78, 216, 0.14), rgba(2, 132, 199, 0.07) 45%, transparent 70%);
+  --glow-contact: radial-gradient(ellipse at center, rgba(29, 78, 216, 0.1), transparent 65%);
+  --grid-line: rgba(20, 51, 108, 0.06);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -107,6 +107,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .eyebrow--center { display: flex; justify-content: center; text-align: center; }
 
 .section { padding: 110px 0; position: relative; }
+.section:nth-of-type(even) { background-image: linear-gradient(180deg, transparent, rgba(2, 132, 199, 0.02)); }
 .section__title {
   font-size: clamp(32px, 5vw, 52px);
   text-align: center;
@@ -234,6 +235,22 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   .nav__links a { font-size: 13px; }
 }
 .nav__links a:hover { color: var(--text); }
+.nav__links a {
+  position: relative;
+}
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--grad);
+  transition: transform 0.22s ease;
+}
+.nav__links a:hover::after { transform: scaleX(1); }
 .nav__actions { display: flex; gap: 10px; align-items: center; }
 .theme-toggle {
   width: 38px; height: 38px;
@@ -972,6 +989,44 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 }
 
 /* ============================================================
+   ACCESS MATRIX
+   ============================================================ */
+.matrix__wrap {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: auto;
+  background: var(--bg-card);
+}
+.matrix__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+.matrix__table th,
+.matrix__table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 13.5px;
+}
+.matrix__table thead th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  background: rgba(2, 132, 199, 0.06);
+  position: sticky;
+  top: 0;
+}
+.matrix__table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+.matrix__table td:first-child {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ============================================================
    FAQ
    ============================================================ */
 .faq__list { display: flex; flex-direction: column; gap: 12px; margin-top: 48px; }
@@ -1102,7 +1157,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 }
 .footer__brand p { font-size: 14px; color: var(--text-dim); margin-top: 16px; max-width: 320px; }
 .footer__compliance { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint) !important; }
-.footer__cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.footer__cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
 .footer__cols h4 {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1163,6 +1218,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   .industries__grid { grid-template-columns: repeat(3, 1fr); }
   .pricing__grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
   .footer__inner { grid-template-columns: 1fr; gap: 40px; }
+  .footer__cols { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 760px) {

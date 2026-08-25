@@ -35,7 +35,7 @@
   <script>
     (function () {
       var t = localStorage.getItem("aimt-theme");
-      if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      if (!t) t = "light";
       document.documentElement.setAttribute("data-theme", t);
     })();
   </script>
@@ -118,8 +118,10 @@
       <nav class="nav__links" aria-label="Primary">
         <a href="#platform">Platform</a>
         <a href="#loop">How it works</a>
+        <a href="#why">Why us</a>
         <a href="#automations">Automations</a>
         <a href="#services">Services</a>
+        <a href="#matrix">Access matrix</a>
         <a href="#usecases">Use cases</a>
         <a href="#industries">Industries</a>
         <a href="#pricing">Pricing</a>
@@ -464,6 +466,66 @@
       </div>
     </section>
 
+    <!-- ======================= WHY CHOOSE ======================= -->
+    <section class="section platform" id="why" aria-labelledby="why-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">WHY CHOOSE AIMAGINETHAT</p>
+        <h2 class="section__title" id="why-title">Not another CRM. <span class="grad-text">A complete operating layer.</span></h2>
+        <p class="section__sub">Teleforce-like depth, adapted to your actual product scope: CRM core + AI assist + workflow governance.</p>
+
+        <div class="platform__grid">
+          <article class="card reveal">
+            <span class="card__tag">UNIFIED WORKSPACE</span>
+            <h3>One platform for pipeline to payment.</h3>
+            <p>Deals, leads, contacts, quotations, payments, tasks and reports stay synchronized without spreadsheet drift.</p>
+          </article>
+          <article class="card reveal">
+            <span class="card__tag">AI WITH CONTROL</span>
+            <h3>Agentic assist with approval gates.</h3>
+            <p>AI suggests and drafts at speed, while your team controls execution through approval checkpoints and role access.</p>
+          </article>
+          <article class="card reveal">
+            <span class="card__tag">FAST DEPLOYMENT</span>
+            <h3>Launch in days, not quarters.</h3>
+            <p>Configured playbooks, workflow templates and guided onboarding let teams activate quickly and scale safely.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= ACCESS MATRIX ======================= -->
+    <section class="section matrix" id="matrix" aria-labelledby="matrix-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--center">MASTER ACCESS &amp; PRICING MATRIX</p>
+        <h2 class="section__title" id="matrix-title">One platform, <span class="grad-text">tiered entitlements.</span></h2>
+        <p class="section__sub">Plans are cumulative. Higher tiers unlock deeper automation and governance over the same core CRM stack.</p>
+
+        <div class="matrix__wrap reveal" role="region" aria-label="Plan entitlement matrix">
+          <table class="matrix__table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Starter CRM</th>
+                <th>Growth CRM</th>
+                <th>Scale CRM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Deals, Leads, Contacts</td><td>Included</td><td>Included</td><td>Included</td></tr>
+              <tr><td>Quotations + Payments</td><td>Included</td><td>Included</td><td>Included</td></tr>
+              <tr><td>Pipeline Views + Reports</td><td>Basic</td><td>Advanced</td><td>Advanced</td></tr>
+              <tr><td>Workflow Automation</td><td>Starter templates</td><td>Custom flows</td><td>Multi-flow orchestration</td></tr>
+              <tr><td>AI Deal Coach</td><td>Summary + sentiment</td><td>Risk + next actions</td><td>Governed action queue</td></tr>
+              <tr><td>Smart Compose + Ask CRM</td><td>Included</td><td>Included</td><td>Included</td></tr>
+              <tr><td>API + Webhooks</td><td>-</td><td>Included</td><td>Included</td></tr>
+              <tr><td>Approval Controls</td><td>-</td><td>Basic</td><td>Advanced</td></tr>
+              <tr><td>Support Model</td><td>Email support</td><td>Priority support</td><td>Priority + onboarding cadence</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- ======================= USE CASES ======================= -->
     <section class="section usecases" id="usecases" aria-labelledby="usecases-title">
       <div class="container">
@@ -570,7 +632,7 @@
     </section>
 
     <!-- ======================= PROOF / TESTIMONIALS ======================= -->
-    <section class="section proof" aria-labelledby="proof-title">
+    <section class="section proof" id="proof" aria-labelledby="proof-title">
       <div class="container">
         <p class="eyebrow eyebrow--center">CUSTOMER VOICE</p>
         <h2 class="section__title" id="proof-title">Trusted by teams that <span class="grad-text">measure every minute.</span></h2>
@@ -603,53 +665,55 @@
     <section class="section pricing" id="pricing" aria-labelledby="pricing-title">
       <div class="container">
         <p class="eyebrow eyebrow--center">PRICING</p>
-        <h2 class="section__title" id="pricing-title">Transparent plans for <span class="grad-text">every growth stage.</span></h2>
-        <p class="section__sub">Teleforce-style tiers adapted to what AImagineThat actually offers today.</p>
+        <h2 class="section__title" id="pricing-title">Transparent per-team pricing for <span class="grad-text">real operations.</span></h2>
+        <p class="section__sub">Plan content shaped like Teleforce packaging, but limited to the modules AImagineThat actually offers.</p>
 
         <div class="pricing__grid">
           <article class="price reveal">
-            <h3>Beta</h3>
-            <p class="price__for">Business suite — CRM, CPQ, automation and AI assist</p>
+            <h3>Starter CRM</h3>
+            <p class="price__for">Communications-ready CRM core for small teams</p>
             <p class="price__amount">$499<span>/mo</span></p>
             <ul>
               <li>Deals, leads, contacts, customers and tasks</li>
               <li>Quotations (CPQ) and payment tracking</li>
-              <li>Workflow automation + saved views</li>
-              <li>AI Deal Coach and Smart Compose</li>
+              <li>Starter workflow templates</li>
+              <li>AI Deal Coach (summary + sentiment)</li>
+              <li>Smart Compose follow-up drafts</li>
               <li>Email support</li>
             </ul>
-            <a class="btn btn--outline btn--block" href="#contact">Get Beta</a>
+            <a class="btn btn--outline btn--block" href="#contact">Get Starter</a>
           </article>
 
           <article class="price price--featured reveal">
             <span class="price__badge">MOST POPULAR</span>
-            <h3>Gamma</h3>
-            <p class="price__for">Scaling teams — advanced CRM, reports and API automation</p>
+            <h3>Growth CRM</h3>
+            <p class="price__for">Everything in Starter, plus advanced automation and APIs</p>
             <p class="price__amount">$799<span>/mo</span></p>
             <ul>
-              <li>Everything in Beta</li>
+              <li>Everything in Starter</li>
               <li>Custom pipeline stages and report builder</li>
               <li>Public API + signed webhooks</li>
               <li>E-signature quotations workflow</li>
-              <li>Lead triage and follow-up agents</li>
+              <li>Lead triage + follow-up agents</li>
+              <li>AI next-action recommendations</li>
               <li>Priority support</li>
             </ul>
-            <a class="btn btn--primary btn--block" href="#contact">Get Gamma</a>
+            <a class="btn btn--primary btn--block" href="#contact">Get Growth</a>
           </article>
 
           <article class="price reveal">
-            <h3>Theta</h3>
-            <p class="price__for">Autonomous operations — multi-agent orchestration and governance</p>
+            <h3>Scale CRM</h3>
+            <p class="price__for">Everything in Growth, plus governed agentic operations</p>
             <p class="price__amount">$1,299<span>/mo</span></p>
             <ul>
-              <li>Everything in Gamma</li>
+              <li>Everything in Growth</li>
               <li>AI action queue + approval workflows</li>
               <li>Multi-agent orchestration flows</li>
               <li>Agent run logs and quality scoring</li>
               <li>Human-in-the-loop guardrails</li>
               <li>Dedicated onboarding cadence</li>
             </ul>
-            <a class="btn btn--outline btn--block" href="#contact">Get Theta</a>
+            <a class="btn btn--outline btn--block" href="#contact">Get Scale</a>
           </article>
         </div>
       </div>
@@ -746,17 +810,25 @@
         <a class="nav__brand" href="#top" aria-label="AImagineThat home">
           <span class="nav__wordmark"><em>AI</em>magine<span>That</span></span>
         </a>
-        <p>Agentic AI CRM platform with AI assist and automation for deals, leads, contacts and follow-ups. Imagine it. Agents do it.</p>
+        <p>A unified customer operations platform for growing businesses. Connect pipeline, automate repeatable work, and scale outcomes with agentic AI assistance.</p>
         <p class="footer__compliance">ISO 27001 · SOC 2 aligned · GDPR · DPDP</p>
       </div>
       <nav class="footer__cols" aria-label="Footer">
         <div>
-          <h4>Product</h4>
-          <a href="#platform">Platform</a>
-          <a href="#loop">How it works</a>
-          <a href="#usecases">Use cases</a>
-          <a href="#industries">Industries</a>
-          <a href="#pricing">Pricing</a>
+          <h4>Products</h4>
+          <a href="#platform">CRM Platform</a>
+          <a href="#services">Automation Engine</a>
+          <a href="#automations">AI Agents</a>
+          <a href="#matrix">Access Matrix</a>
+          <a href="#pricing">Plans</a>
+        </div>
+        <div>
+          <h4>Solutions</h4>
+          <a href="#industries">Healthcare</a>
+          <a href="#industries">BFSI</a>
+          <a href="#industries">E-commerce</a>
+          <a href="#industries">Real Estate</a>
+          <a href="#industries">Education</a>
         </div>
         <div>
           <h4>Company</h4>
@@ -767,13 +839,18 @@
           <a href="#faq">FAQ</a>
         </div>
         <div>
+          <h4>Resources</h4>
+          <a href="#usecases">Use Cases</a>
+          <a href="#proof">Customer Voice</a>
+          <a href="#contact">Request Demo</a>
+          <a href="#">Documentation</a>
+          <a href="#">Support Policy</a>
+        </div>
+        <div>
           <h4>Legal</h4>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
           <a href="#">Refund Policy</a>
-        </div>
-        <div>
-          <h4>Status</h4>
           <p class="footer__status"><span class="pulse-dot pulse-dot--green"></span> All systems operational</p>
         </div>
       </nav>
