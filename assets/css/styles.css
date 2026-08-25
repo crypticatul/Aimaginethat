@@ -284,7 +284,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   transform: translateX(-50%);
   width: 900px; height: 700px;
   background: var(--glow-hero);
-  animation: hero-glow 14s ease-in-out infinite alternate;
+  animation: hero-glow 18s ease-in-out infinite alternate;
   pointer-events: none;
 }
 .hero__grid-bg {
@@ -345,26 +345,64 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__console { animation: rise 0.7s var(--ease-out-quint) 0.25s both; }
 
 @keyframes hero-glow {
-  from { opacity: 0.78; transform: translateX(-50%) scale(0.99); }
-  to { opacity: 0.98; transform: translateX(-50%) scale(1.02); }
+  from { opacity: 0.76; transform: translate3d(-50%, 0, 0); }
+  to { opacity: 0.96; transform: translate3d(-50%, 18px, 0); }
 }
 
-@keyframes hero-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+@keyframes hero-orbit {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.48; }
+  50% { transform: translate3d(-18px, 14px, 0) rotate(8deg); opacity: 0.72; }
+  100% { transform: translate3d(10px, -10px, 0) rotate(0deg); opacity: 0.5; }
+}
+
+@keyframes hero-shine {
+  0%, 20% { transform: translate3d(-120%, 0, 0) rotate(14deg); opacity: 0; }
+  35% { opacity: 0.34; }
+  60%, 100% { transform: translate3d(145%, 0, 0) rotate(14deg); opacity: 0; }
 }
 
 /* Desktop app mockup (always light — reads as a real product screen) */
-.hero__console { position: relative; }
+.hero__console { position: relative; isolation: isolate; }
+.hero__console::before,
+.hero__console::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(2px);
+}
+.hero__console::before {
+  inset: -44px -34px auto auto;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.32), rgba(29, 78, 216, 0.12) 52%, transparent 72%);
+  animation: hero-orbit 16s ease-in-out infinite alternate;
+}
+.hero__console::after {
+  inset: auto auto -54px -42px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.18), rgba(2, 132, 199, 0.12) 46%, transparent 72%);
+  animation: hero-orbit 18s ease-in-out infinite alternate-reverse;
+}
 .appwin {
+  position: relative;
   background: #fbfbfd;
   border: 1px solid rgba(15, 20, 45, 0.12);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-glow), 0 24px 60px rgba(0, 0, 0, 0.28);
   font-family: var(--font-body);
-  animation: hero-float 10s ease-in-out infinite;
-  will-change: transform;
+}
+.appwin::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -40%;
+  width: 34%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.52), transparent);
+  animation: hero-shine 9s ease-in-out infinite;
+  pointer-events: none;
 }
 .appwin__chrome {
   display: flex;
@@ -502,9 +540,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   border: 1px solid rgba(15, 20, 45, 0.07);
   border-radius: 10px;
   padding: 8px 12px;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: log-in 0.4s ease forwards;
+  opacity: 1;
 }
 .feed-item__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .feed-item__dot--green { background: #34d399; }
@@ -530,7 +566,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   display: block;
 }
 .feed-item time { font-size: 10.5px; color: #9aa1b0; flex-shrink: 0; }
-@keyframes log-in { to { opacity: 1; transform: translateY(0); } }
 
 .hero__float {
   position: absolute;
@@ -547,8 +582,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__float-value { font-size: 13px; font-weight: 600; color: #12151f; }
 .hero__float--1 { top: -22px; right: -14px; }
 .hero__float--2 { bottom: -20px; left: -18px; }
-.hero__float--1 { animation: hero-float 12s ease-in-out infinite; }
-.hero__float--2 { animation: hero-float 13s ease-in-out infinite reverse; }
 
 /* ============================================================
    TRUST STRIP

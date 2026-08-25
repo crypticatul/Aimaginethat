@@ -87,9 +87,6 @@
     };
 
     script.slice(0, MAX_ITEMS).forEach((_, i) => { idx = i; addLine(); });
-    if (!reducedMotion) {
-      setInterval(addLine, 6000);
-    }
   }
 
   /* ---------- Animated counters ---------- */
