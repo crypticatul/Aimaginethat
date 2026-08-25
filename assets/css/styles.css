@@ -284,7 +284,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   transform: translateX(-50%);
   width: 900px; height: 700px;
   background: var(--glow-hero);
-  animation: hero-glow 9s ease-in-out infinite alternate;
+  animation: hero-glow 14s ease-in-out infinite alternate;
   pointer-events: none;
 }
 .hero__grid-bg {
@@ -293,7 +293,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
-  animation: hero-grid 18s linear infinite;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   pointer-events: none;
@@ -346,18 +345,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__console { animation: rise 0.7s var(--ease-out-quint) 0.25s both; }
 
 @keyframes hero-glow {
-  from { opacity: 0.75; transform: translateX(-50%) scale(0.98); }
-  to { opacity: 1; transform: translateX(-50%) scale(1.04); }
-}
-
-@keyframes hero-grid {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 56px 28px, 28px 56px; }
+  from { opacity: 0.78; transform: translateX(-50%) scale(0.99); }
+  to { opacity: 0.98; transform: translateX(-50%) scale(1.02); }
 }
 
 @keyframes hero-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-3px); }
 }
 
 /* Desktop app mockup (always light — reads as a real product screen) */
@@ -369,7 +363,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   overflow: hidden;
   box-shadow: var(--shadow-glow), 0 24px 60px rgba(0, 0, 0, 0.28);
   font-family: var(--font-body);
-  animation: hero-float 7s ease-in-out infinite;
+  animation: hero-float 10s ease-in-out infinite;
+  will-change: transform;
 }
 .appwin__chrome {
   display: flex;
@@ -552,8 +547,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .hero__float-value { font-size: 13px; font-weight: 600; color: #12151f; }
 .hero__float--1 { top: -22px; right: -14px; }
 .hero__float--2 { bottom: -20px; left: -18px; }
-.hero__float--1 { animation: hero-float 6.5s ease-in-out infinite; }
-.hero__float--2 { animation: hero-float 7.8s ease-in-out infinite reverse; }
+.hero__float--1 { animation: hero-float 12s ease-in-out infinite; }
+.hero__float--2 { animation: hero-float 13s ease-in-out infinite reverse; }
 
 /* ============================================================
    TRUST STRIP
@@ -987,6 +982,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   color: var(--green);
   font-weight: 600;
 }
+.pricing__more {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
 
 /* ============================================================
    ACCESS MATRIX
@@ -1210,6 +1210,23 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1080px) {
+  .nav__links,
+  .nav__actions .btn--ghost { display: none; }
+  .nav__toggle { display: flex; }
+  .nav.is-open .nav__links {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px; left: 0; right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+    gap: 18px;
+  }
+  .nav__actions .btn--primary {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
   .hero__inner { grid-template-columns: 1fr; gap: 64px; }
   .hero__console { max-width: 680px; }
   .loop__steps { grid-template-columns: repeat(3, 1fr); }
@@ -1223,18 +1240,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 @media (max-width: 760px) {
   .section { padding: 76px 0; }
-  .nav__links, .nav__actions .btn--ghost { display: none; }
-  .nav__toggle { display: flex; }
-  .nav.is-open .nav__links {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 72px; left: 0; right: 0;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 24px;
-    gap: 18px;
-  }
+  .nav__actions .btn--primary { display: none; }
   .hero { padding-top: 130px; }
   .hero__stats { grid-template-columns: repeat(2, 1fr); gap: 22px; }
   .hero__float { display: none; }

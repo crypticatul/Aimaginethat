@@ -86,11 +86,9 @@
       idx++;
     };
 
-    if (reducedMotion) {
-      script.slice(0, MAX_ITEMS).forEach((_, i) => { idx = i; addLine(); });
-    } else {
-      for (let i = 0; i < 4; i++) addLine();
-      setInterval(addLine, 3200);
+    script.slice(0, MAX_ITEMS).forEach((_, i) => { idx = i; addLine(); });
+    if (!reducedMotion) {
+      setInterval(addLine, 6000);
     }
   }
 
