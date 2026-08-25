@@ -1000,14 +1000,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .matrix__table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 860px;
+  table-layout: fixed;
 }
 .matrix__table th,
 .matrix__table td {
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border);
   text-align: left;
-  font-size: 13.5px;
+  font-size: 13px;
+  line-height: 1.45;
 }
 .matrix__table thead th {
   font-family: var(--font-mono);
@@ -1017,6 +1019,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   background: rgba(2, 132, 199, 0.06);
   position: sticky;
   top: 0;
+  z-index: 3;
+}
+.matrix__table thead th:first-child,
+.matrix__table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--bg-card);
+}
+.matrix__table thead th:first-child {
+  z-index: 4;
+  background: rgba(2, 132, 199, 0.11);
 }
 .matrix__table tbody tr:hover {
   background: rgba(59, 130, 246, 0.05);
@@ -1024,6 +1038,22 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .matrix__table td:first-child {
   font-weight: 600;
   color: var(--text);
+  width: 38%;
+}
+.matrix__table td:not(:first-child),
+.matrix__table th:not(:first-child) {
+  width: 20.6%;
+}
+.matrix__group th {
+  padding: 9px 14px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  color: var(--violet);
+  background: rgba(29, 78, 216, 0.08);
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
 }
 
 /* ============================================================
@@ -1234,6 +1264,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   .platform__grid, .services__grid, .proof__grid { grid-template-columns: repeat(2, 1fr); }
   .industries__grid { grid-template-columns: repeat(3, 1fr); }
   .pricing__grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+  .matrix__table { min-width: 760px; }
+  .matrix__table th,
+  .matrix__table td {
+    padding: 10px 12px;
+    font-size: 12.2px;
+  }
+  .matrix__group th {
+    padding: 8px 12px;
+    font-size: 10px;
+  }
   .footer__inner { grid-template-columns: 1fr; gap: 40px; }
   .footer__cols { grid-template-columns: repeat(3, 1fr); }
 }
@@ -1247,6 +1287,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   .loop__steps { grid-template-columns: 1fr 1fr; }
   .platform__grid, .services__grid, .usecases__grid, .proof__grid { grid-template-columns: 1fr; }
   .industries__grid { grid-template-columns: repeat(2, 1fr); }
+  .matrix__table { min-width: 680px; }
   .proof__stats { grid-template-columns: repeat(2, 1fr); }
   .contact__inner { grid-template-columns: 1fr; gap: 48px; }
   .form__row { grid-template-columns: 1fr; }
