@@ -255,23 +255,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 }
 .nav__links a:hover::after { transform: scaleX(1); }
 .nav__actions { display: flex; gap: 12px; align-items: center; }
-.nav__chat {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #25d366;
-  color: #ffffff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-}
-.nav__chat:hover {
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-}
-.nav__chat svg { width: 20px; height: 20px; }
 .theme-toggle {
   width: 38px; height: 38px;
   display: grid;
@@ -329,6 +312,26 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
   pointer-events: none;
+}
+.hero__waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.hero__waves path { fill: none; stroke-linecap: round; }
+.hero__wave-line {
+  stroke-dasharray: 6 14;
+  animation: wave-flow 30s linear infinite;
+}
+.hero__wave-line--slow { animation-duration: 46s; animation-direction: reverse; }
+@keyframes wave-flow {
+  to { stroke-dashoffset: -800; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__wave-line, .hero__waves circle { animation: none; }
 }
 .hero__inner {
   position: relative;
