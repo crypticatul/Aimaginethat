@@ -224,7 +224,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 }
 .nav__wordmark span { color: var(--text-dim); }
 .nav__links {
-  display: none;
+  display: flex;
   gap: 28px;
 }
 .nav__links a {
@@ -233,8 +233,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   transition: color 0.15s ease;
   white-space: nowrap;
 }
-@media (max-width: 1180px) {
-  .nav__links { gap: 18px; }
+@media (max-width: 1080px) {
+  .nav__links { display: none; gap: 18px; }
   .nav__links a { font-size: 13px; }
 }
 .nav__links a:hover { color: var(--text); }
@@ -288,7 +288,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 :root[data-theme="dark"] .theme-toggle__moon { display: none; }
 :root[data-theme="light"] .theme-toggle__sun { display: none; }
 .nav__toggle {
-  display: flex;
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -298,6 +298,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   color: var(--text);
 }
 .nav__toggle span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.25s; }
+
+@media (max-width: 1080px) {
+  .nav__toggle { display: flex; }
+}
 
 /* ============================================================
    HERO
