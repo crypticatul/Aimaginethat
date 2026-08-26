@@ -326,7 +326,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   stroke-dasharray: 6 14;
   animation: wave-flow 30s linear infinite;
 }
-.hero__wave-line--slow { animation-duration: 46s; animation-direction: reverse; }
+.hero__wave-line--slow { animation-duration: 46s; }
+.hero__flow-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  fill: var(--text-faint);
+  opacity: 0.85;
+}
 @keyframes wave-flow {
   to { stroke-dashoffset: -800; }
 }
