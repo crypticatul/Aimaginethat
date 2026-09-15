@@ -1562,6 +1562,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   border-color: var(--violet);
   font-weight: 600;
 }
+.cal-slot-btn.is-busy {
+  background: rgba(251, 113, 133, 0.08);
+  border-color: rgba(251, 113, 133, 0.35);
+  color: var(--hot);
+  cursor: not-allowed;
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+.cal-slot-btn.is-busy:hover {
+  background: rgba(251, 113, 133, 0.08);
+  border-color: rgba(251, 113, 133, 0.35);
+}
 
 /* Booking Confirm Form */
 .cal-booking-form {

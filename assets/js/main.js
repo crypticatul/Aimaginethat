@@ -173,6 +173,53 @@
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+  // Live bookings persisted locally so slot/host availability reacts to real scheduling
+  const BOOKINGS_KEY = "aimt_bookings_v1";
+  const loadBookings = () => {
+    try {
+      return JSON.parse(localStorage.getItem(BOOKINGS_KEY)) || [];
+    } catch {
+      return [];
+    }
+  };
+  const saveBookings = (list) => localStorage.setItem(BOOKINGS_KEY, JSON.stringify(list));
+  const getDateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  const isSlotBooked = (host, dateKey, time) => loadBookings().some((b) => b.host === host && b.dateKey === dateKey && b.time === time);
+  const addBooking = (host, dateKey, time) => {
+    const list = loadBookings();
+    list.push({ host, dateKey, time });
+    saveBookings(list);
+  };
+  const getSlotsForDate = (host, date) => {
+    const isToday = isSameDay(date, currentDate);
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    if (isToday && host.slotsMap.today) return host.slotsMap.today;
+    if (isWeekend && host.slotsMap.weekend) return host.slotsMap.weekend;
+    return host.slotsMap.weekday;
+  };
+
+  // Reflects real bookings: a host shows Busy only once every slot for the day is taken
+  const updateTeamChipsAvailability = () => {
+    const todayKey = getDateKey(currentDate);
+    hostChips.forEach((chip) => {
+      const name = chip.dataset.name;
+      const host = teamData[name];
+      const tagEl = chip.querySelector(".team-chip__tag");
+      if (!host || !tagEl) return;
+
+      const todaySlots = getSlotsForDate(host, currentDate);
+      const freeCount = todaySlots.filter((t) => !isSlotBooked(name, todayKey, t)).length;
+
+      if (todaySlots.length === 0 || freeCount === 0) {
+        tagEl.textContent = "🔴 Busy Today";
+        tagEl.className = "team-chip__tag team-chip__tag--busy";
+      } else {
+        tagEl.textContent = `🟢 Free Today (${freeCount} slot${freeCount > 1 ? "s" : ""})`;
+        tagEl.className = "team-chip__tag team-chip__tag--free";
+      }
+    });
+  };
+
   let selectedHost = "Neal";
   let currentDate = new Date();
   let displayedMonth = currentDate.getMonth();
@@ -266,10 +313,8 @@
     }
 
     const host = teamData[selectedHost] || teamData.Neal;
-    const isWeekend = selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
-    let slots = host.slotsMap.weekday;
-    if (isToday && host.slotsMap.today) slots = host.slotsMap.today;
-    else if (isWeekend && host.slotsMap.weekend) slots = host.slotsMap.weekend;
+    const slots = getSlotsForDate(host, selectedDate);
+    const dateKey = getDateKey(selectedDate);
 
     slotsContainer.innerHTML = "";
     if (!slots || slots.length === 0) {
@@ -278,22 +323,30 @@
       return;
     }
 
-    slots.forEach((slot, index) => {
+    const firstFreeSlot = slots.find((slot) => !isSlotBooked(selectedHost, dateKey, slot));
+
+    slots.forEach((slot) => {
+      const booked = isSlotBooked(selectedHost, dateKey, slot);
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "cal-slot-btn" + (index === 0 ? " is-selected" : "");
-      btn.textContent = slot;
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#cal-slots-container .cal-slot-btn").forEach(s => s.classList.remove("is-selected"));
-        btn.classList.add("is-selected");
-        selectedTimeSlot = slot;
-        if (inputTime) inputTime.value = slot;
-        updateConfirmButtonText();
-      });
+      btn.className = "cal-slot-btn" + (booked ? " is-busy" : slot === firstFreeSlot ? " is-selected" : "");
+      btn.textContent = booked ? `${slot} · Busy` : slot;
+      if (booked) {
+        btn.disabled = true;
+        btn.title = "Already booked for this slot";
+      } else {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#cal-slots-container .cal-slot-btn").forEach(s => s.classList.remove("is-selected"));
+          btn.classList.add("is-selected");
+          selectedTimeSlot = slot;
+          if (inputTime) inputTime.value = slot;
+          updateConfirmButtonText();
+        });
+      }
       slotsContainer.appendChild(btn);
     });
 
-    selectedTimeSlot = slots[0];
+    selectedTimeSlot = firstFreeSlot || "";
     if (inputTime) inputTime.value = selectedTimeSlot;
     updateConfirmButtonText();
   };
@@ -353,6 +406,7 @@
   // Initialize Calendar & Slots
   renderCalendar();
   renderTimeSlots();
+  updateTeamChipsAvailability();
 
   // Booking Form Submission
   const calBookingForm = document.getElementById("gw-cal-booking-form");
@@ -370,6 +424,10 @@
         invalid[0].focus();
         return;
       }
+      if (!selectedTimeSlot) {
+        alert("All slots for this day are booked. Please pick another date or team member.");
+        return;
+      }
 
       const confirmBtn = document.getElementById("cal-confirm-btn");
       confirmBtn.disabled = true;
@@ -385,6 +443,10 @@
       data.Meeting_Host_Email = teamData[selectedHost]?.email || "bob@aimaginethat.com";
       data.Meeting_Date = document.getElementById("cal-input-date")?.value || "";
       data.Meeting_Time = selectedTimeSlot;
+
+      // Mark this slot busy immediately so it can no longer be double-booked
+      addBooking(selectedHost, getDateKey(selectedDate), selectedTimeSlot);
+      updateTeamChipsAvailability();
 
       try {
         await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
@@ -433,7 +495,7 @@
         calBookingForm.style.display = "flex";
         const confirmBtn = document.getElementById("cal-confirm-btn");
         confirmBtn.disabled = false;
-        updateConfirmButtonText();
+        renderTimeSlots();
       });
     }
   }
