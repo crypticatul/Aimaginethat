@@ -356,6 +356,8 @@
     const subject = document.getElementById("cal-form-subject");
     const hostInput = document.getElementById("cal-input-host");
     const hostEmailInput = document.getElementById("cal-input-host-email");
+    const ccInput = document.getElementById("cal-input-cc");
+    const replyToInput = document.getElementById("cal-input-replyto");
 
     const host = teamData[selectedHost] || teamData.Neal;
     if (btn) {
@@ -366,6 +368,14 @@
     }
     if (hostInput) hostInput.value = selectedHost;
     if (hostEmailInput) hostEmailInput.value = host.email;
+    if (replyToInput) replyToInput.value = host.email;
+    // CC the rest of the team so whoever is picked, everyone still stays in the loop
+    if (ccInput) {
+      ccInput.value = Object.values(teamData)
+        .map((h) => h.email)
+        .filter((email) => email !== host.email)
+        .join(",");
+    }
   };
 
   // Month navigation
@@ -433,23 +443,39 @@
       confirmBtn.disabled = true;
       confirmBtn.innerHTML = `Confirming Google Meet...`;
 
+      const host = teamData[selectedHost] || teamData.Neal;
+      const meetingDate = document.getElementById("cal-input-date")?.value || "";
+
+      // Unique-looking Meet code per booking so each invite has its own link
+      const meetCode = `aimt-${selectedHost.toLowerCase()}-${Math.random().toString(36).slice(2, 6)}`;
+      const meetLink = `https://meet.google.com/${meetCode}`;
+      const meetLinkInput = document.getElementById("cal-input-meet-link");
+      if (meetLinkInput) meetLinkInput.value = meetLink;
+
+      const eventTitle = `AImagineThat AI Review with ${selectedHost}`;
+      const eventDetails = `Google Meet 1:1 Architecture Review session with ${selectedHost} (${host.role}).\nJoin: ${meetLink}`;
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(meetLink)}`;
+
       const formData = new FormData(calBookingForm);
       const data = Object.fromEntries(formData.entries());
 
-      data._cc = CC_EMAILS;
       data._template = "table";
       data._captcha = "false";
       data.Meeting_Host = selectedHost;
-      data.Meeting_Host_Email = teamData[selectedHost]?.email || "bob@aimaginethat.com";
-      data.Meeting_Date = document.getElementById("cal-input-date")?.value || "";
+      data.Meeting_Host_Email = host.email;
+      data.Meeting_Date = meetingDate;
       data.Meeting_Time = selectedTimeSlot;
+      data.Google_Meet_Link = meetLink;
+      // FormSubmit auto-replies this message straight to the attendee's own email
+      data._autoresponse = `Hi ${data.name},\n\nYour 30-min Google Meet with ${selectedHost} (${host.role}) is confirmed.\n\nDate: ${meetingDate}\nTime: ${selectedTimeSlot}\nGoogle Meet link: ${meetLink}\n\nAdd it to your calendar: ${gcalUrl}\n\n— AImagineThat Team`;
 
       // Mark this slot busy immediately so it can no longer be double-booked
       addBooking(selectedHost, getDateKey(selectedDate), selectedTimeSlot);
       updateTeamChipsAvailability();
 
       try {
-        await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
+        // Sends to the selected host's inbox (CC'd to the rest of the team) + auto-replies the attendee
+        await fetch(`https://formsubmit.co/ajax/${host.email}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -461,13 +487,8 @@
         console.warn("AJAX calendar booking warning:", err);
       }
 
-      // Generate 1-click Google Calendar URL
-      const host = teamData[selectedHost] || teamData.Neal;
-      const eventTitle = `AImagineThat AI Review with ${selectedHost}`;
-      const eventDetails = `Google Meet 1:1 Architecture Review session with ${selectedHost} (${host.role}).\n\nAttendees: ${data.name} (${data.email}), ${selectedHost} (${host.email}).\nGoogle Meet: https://meet.google.com/new`;
-      const attendees = `${data.email},${host.email},bob@aimaginethat.com,neal@aimaginethat.com,pummy@aimaginethat.com,atul@aimaginethat.com`;
-
-      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&details=${encodeURIComponent(eventDetails)}&add=${encodeURIComponent(attendees)}&location=${encodeURIComponent("Google Meet Video Call")}`;
+      // Open the host's Google Calendar "add event" screen automatically
+      window.open(gcalUrl, "_blank", "noopener,noreferrer");
 
       calBookingForm.style.display = "none";
       const successCard = document.getElementById("cal-booked-success");
@@ -477,10 +498,10 @@
       if (detailsEl) {
         detailsEl.innerHTML = `
           <div><b>Host:</b> ${selectedHost} (${host.role})</div>
-          <div><b>Date:</b> ${data.Meeting_Date}</div>
+          <div><b>Date:</b> ${meetingDate}</div>
           <div><b>Time:</b> ${selectedTimeSlot} (30 mins)</div>
           <div><b>Attendee:</b> ${data.name} (${data.email})</div>
-          <div style="color: var(--cyan); margin-top: 4px;"><b>Platform:</b> Google Meet Video Call</div>
+          <div style="color: var(--cyan); margin-top: 4px;"><b>Google Meet:</b> <a href="${meetLink}" target="_blank" rel="noopener noreferrer">${meetLink}</a></div>
         `;
       }
       if (gcalBtn) gcalBtn.href = gcalUrl;
