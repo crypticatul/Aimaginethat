@@ -369,11 +369,12 @@
     if (hostInput) hostInput.value = selectedHost;
     if (hostEmailInput) hostEmailInput.value = host.email;
     if (replyToInput) replyToInput.value = host.email;
-    // CC the rest of the team so whoever is picked, everyone still stays in the loop
+    // Only bob@ is verified with FormSubmit, so keep it as the delivery endpoint and
+    // CC everyone else (host included) - CC recipients don't need separate activation.
     if (ccInput) {
       ccInput.value = Object.values(teamData)
         .map((h) => h.email)
-        .filter((email) => email !== host.email)
+        .filter((email) => email !== RECIPIENT_EMAIL)
         .join(",");
     }
   };
@@ -474,8 +475,8 @@
       updateTeamChipsAvailability();
 
       try {
-        // Sends to the selected host's inbox (CC'd to the rest of the team) + auto-replies the attendee
-        await fetch(`https://formsubmit.co/ajax/${host.email}`, {
+        // Always post through the verified bob@ endpoint; host + rest of team are CC'd
+        const response = await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -483,8 +484,15 @@
           },
           body: JSON.stringify(data)
         });
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.success === false || result.success === "false") {
+          throw new Error("FormSubmit rejected the AJAX request: " + JSON.stringify(result));
+        }
       } catch (err) {
-        console.warn("AJAX calendar booking warning:", err);
+        console.warn("AJAX calendar booking failed, falling back to direct form submit:", err);
+        window.open(gcalUrl, "_blank", "noopener,noreferrer");
+        calBookingForm.submit();
+        return;
       }
 
       // Open the host's Google Calendar "add event" screen automatically
@@ -566,12 +574,13 @@
           body: JSON.stringify(data)
         });
 
-        if (response.ok) {
+        const result = await response.json().catch(() => null);
+        if (response.ok && result && result.success !== false && result.success !== "false") {
           btn.classList.add("is-success");
           btn.innerHTML = "✓ Inquiry sent to all 4 emails!";
           form.reset();
         } else {
-          throw new Error("Submission error: " + response.status);
+          throw new Error("FormSubmit rejected the AJAX request: " + JSON.stringify(result));
         }
       } catch (err) {
         console.warn("AJAX form submission fallback:", err);
