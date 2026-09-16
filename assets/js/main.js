@@ -124,7 +124,7 @@
 
   /* ---------- Contact & Google Workspace Real-Time Calendar Scheduler ---------- */
   const RECIPIENT_EMAIL = "bob@aimaginethat.com";
-  const CC_EMAILS = "neal@aimaginethat.com,pummy@aimaginethat.com,atul@aimaginethat.com";
+  const CC_EMAILS = "neal@aimaginethat.com,pummy@aimaginethat.com";
 
   // Team Schedule Data
   const teamData = {
@@ -146,16 +146,6 @@
         weekday: ["10:00 AM", "11:30 AM", "12:30 PM", "02:30 PM", "04:00 PM", "05:00 PM"],
         today: ["11:00 AM", "12:30 PM", "02:30 PM", "04:00 PM"],
         weekend: ["10:30 AM", "01:30 PM"]
-      }
-    },
-    Atul: {
-      name: "Atul",
-      email: "atul@aimaginethat.com",
-      role: "Tech & Automation",
-      slotsMap: {
-        weekday: ["10:00 AM", "12:00 PM", "02:00 PM", "03:30 PM", "05:00 PM"],
-        today: ["12:00 PM", "03:30 PM", "05:00 PM"],
-        weekend: ["11:30 AM", "03:00 PM"]
       }
     },
     Bob: {

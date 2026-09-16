@@ -881,7 +881,7 @@
           <p>Tell us about your pipeline, or schedule a live 30-minute Google Meet consultation directly from our real-time team calendar on the right.</p>
 
           <form class="contact__form contact__form--inquiry" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
-            <input type="hidden" name="_cc" value="neal@aimaginethat.com,pummy@aimaginethat.com,atul@aimaginethat.com" />
+            <input type="hidden" name="_cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
             <input type="hidden" name="_subject" value="New Inquiry - AImagineThat Website" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
@@ -896,19 +896,19 @@
             </div>
             <div class="form__row">
               <label>Company<input type="text" name="company" autocomplete="organization" placeholder="Company Inc." /></label>
-              <label>Monthly volume
-                <select name="volume">
-                  <option value="">Expected volume</option>
-                  <option>&lt; 1,000 interactions</option>
-                  <option>1,000 – 10,000</option>
-                  <option>10,000 – 100,000</option>
-                  <option>100,000+</option>
+              <label>Plans
+                <select name="plan">
+                  <option value="">Select a plan</option>
+                  <option>Starter</option>
+                  <option>Growth</option>
+                  <option>Scale</option>
+                  <option>Custom</option>
                 </select>
               </label>
             </div>
-            <label>What do you want to automate?<textarea name="message" rows="3" placeholder="e.g. inbound lead calls, appointment booking, support triage…"></textarea></label>
+            <label>Enter your query?<textarea name="message" rows="3" placeholder="e.g. I want to automate inbound lead calls, appointment booking, support triage…"></textarea></label>
             <button class="btn btn--primary btn--lg btn--block" type="submit">Send inquiry to team <span aria-hidden="true">→</span></button>
-            <p class="form__note">Dispatches to bob, neal, pummy &amp; atul · Reply &lt; 4 hours</p>
+            <p class="form__note">Dispatches to bob, neal &amp; pummy · Reply &lt; 4 hours</p>
           </form>
 
           <ul class="contact__perks" style="margin-top: 24px;">
@@ -918,7 +918,7 @@
           </ul>
 
           <div class="contact__meta">
-            <p><b>Team</b> · <a href="mailto:bob@aimaginethat.com">bob</a> · <a href="mailto:neal@aimaginethat.com">neal</a> · <a href="mailto:pummy@aimaginethat.com">pummy</a> · <a href="mailto:atul@aimaginethat.com">atul</a></p>
+            <p><b>Team</b> · <a href="mailto:bob@aimaginethat.com">bob</a> · <a href="mailto:neal@aimaginethat.com">neal</a> · <a href="mailto:pummy@aimaginethat.com">pummy</a></p>
             <p><b>Compliance</b> · MSA / NDA · US &amp; EU data residency</p>
           </div>
         </div>
@@ -967,16 +967,6 @@
               <span class="team-chip__info">
                 <strong class="team-chip__name">Pummy</strong>
                 <span class="team-chip__role">Customer Solutions</span>
-                <span class="team-chip__tag team-chip__tag--free">🟢 Free Today</span>
-              </span>
-            </button>
-
-            <!-- Atul -->
-            <button class="team-chip" type="button" data-name="Atul" data-email="atul@aimaginethat.com" data-role="Automation & Tech">
-              <span class="team-chip__avatar">A</span>
-              <span class="team-chip__info">
-                <strong class="team-chip__name">Atul</strong>
-                <span class="team-chip__role">Tech &amp; Automation</span>
                 <span class="team-chip__tag team-chip__tag--free">🟢 Free Today</span>
               </span>
             </button>
@@ -1034,7 +1024,7 @@
 
           <!-- Booking Details & Confirm Form -->
           <form id="gw-cal-booking-form" class="cal-booking-form" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
-            <input type="hidden" name="_cc" id="cal-input-cc" value="neal@aimaginethat.com,pummy@aimaginethat.com,atul@aimaginethat.com" />
+            <input type="hidden" name="_cc" id="cal-input-cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
             <input type="hidden" name="_subject" id="cal-form-subject" value="New Google Meet Scheduled with Neal" />
             <input type="hidden" name="_replyto" id="cal-input-replyto" value="neal@aimaginethat.com" />
             <input type="hidden" name="_autoresponse" id="cal-input-autoresponse" value="" />
