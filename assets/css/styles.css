@@ -1845,6 +1845,97 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 }
 :root[data-theme="light"] .quote p { color: var(--text-dim); }
 
+/* ============================================================
+   LEGAL PAGES (privacy / terms)
+   ============================================================ */
+.legal__meta {
+  font-family: var(--font-mono);
+  font-size: 12px !important;
+  letter-spacing: 0.08em;
+  color: var(--text-faint) !important;
+  margin-top: 18px;
+}
+.legal { padding-top: 40px; }
+.legal__toc {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 48px;
+  columns: 2;
+  column-gap: 28px;
+}
+.legal__toc h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-faint);
+  font-weight: 500;
+  margin-bottom: 12px;
+  column-span: all;
+}
+.legal__toc a {
+  display: block;
+  font-size: 14px;
+  color: var(--text-dim);
+  padding: 4px 0;
+  break-inside: avoid;
+  transition: color 0.15s ease;
+}
+.legal__toc a:hover { color: var(--text); }
+.legal__body h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  margin: 48px 0 14px;
+  scroll-margin-top: 110px;
+}
+.legal__body h2:first-child { margin-top: 0; }
+.legal__body h3 {
+  font-size: 17px;
+  margin: 26px 0 10px;
+  color: var(--text);
+}
+.legal__body p,
+.legal__body li {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+.legal__body p { margin-bottom: 14px; }
+.legal__body ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.legal__body li {
+  padding-left: 24px;
+  position: relative;
+}
+.legal__body li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 10px;
+  width: 7px; height: 7px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+.legal__body strong { color: var(--text); font-weight: 600; }
+.legal__body a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
+.legal__body a:hover { color: var(--violet); }
+.legal__body code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-raise);
+  color: var(--text);
+  word-break: break-all;
+}
+@media (max-width: 720px) {
+  .legal__toc { columns: 1; }
+}
+
 @media (max-width: 1080px) {
   .values__grid { grid-template-columns: repeat(2, 1fr); }
 }
