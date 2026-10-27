@@ -1027,13 +1027,13 @@
           <form id="gw-cal-booking-form" class="cal-booking-form" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
             <input type="hidden" name="_cc" id="cal-input-cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
             <input type="hidden" name="_subject" id="cal-form-subject" value="New Google Meet Scheduled with Neal" />
-            <input type="hidden" name="_replyto" id="cal-input-replyto" value="neal@aimaginethat.com" />
+            <input type="hidden" name="_replyto" id="cal-input-replyto" value="" />
             <input type="hidden" name="_autoresponse" id="cal-input-autoresponse" value="" />
             <input type="hidden" name="Host_Name" id="cal-input-host" value="Neal" />
             <input type="hidden" name="Host_Email" id="cal-input-host-email" value="neal@aimaginethat.com" />
             <input type="hidden" name="Meeting_Date" id="cal-input-date" value="Wed, 16 Sep 2026" />
             <input type="hidden" name="Meeting_Time" id="cal-input-time" value="10:30 AM" />
-            <input type="hidden" name="Google_Meet_Link" id="cal-input-meet-link" value="https://meet.google.com/new" />
+            <input type="hidden" name="Google_Meet_Link" id="cal-input-meet-link" value="Host will send the Google Meet link in the calendar invite" />
             <input type="hidden" name="Platform" value="Google Meet (30 Mins)" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
@@ -1051,12 +1051,12 @@
           <!-- Booked Confirmation Screen -->
           <div id="cal-booked-success" class="cal-success-card" style="display: none;">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11.5 14.5 16 9.5"/></svg>
-            <h4>Google Meet Booked!</h4>
-            <p>Meeting invitations &amp; video link have been sent to your email and team members.</p>
+            <h4>Meeting Requested!</h4>
+            <p>Your details have been sent to the team. Save the Google Calendar event so your host receives the invite.</p>
             <div class="cal-success-details" id="cal-success-details"></div>
             <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
               <a class="btn btn--primary btn--block" id="cal-gcal-link-btn" href="#" target="_blank" rel="noopener noreferrer">
-                📅 Add Event to Google Calendar
+                📅 Save Event &amp; Invite Host
               </a>
               <button class="btn btn--ghost btn--block" type="button" id="cal-book-another-btn" style="font-size: 13px;">
                 Schedule Another Time

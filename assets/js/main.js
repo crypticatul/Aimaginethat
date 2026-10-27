@@ -180,6 +180,29 @@
     list.push({ host, dateKey, time });
     saveBookings(list);
   };
+  // Slot times are the team's office hours (Plymouth, MI).
+  const TEAM_TIMEZONE = "America/Detroit";
+  const TEAM_TIMEZONE_LABEL = "ET";
+  const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const toGcalStamp = (date, h, m) =>
+    `${getDateKey(date).replace(/-/g, "")}T${String(h).padStart(2, "0")}${String(m).padStart(2, "0")}00`;
+  const getSlotRange = (date, slot, durationMins = 30) => {
+    const match = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(String(slot).trim());
+    if (!match) return "";
+    let hour = Number(match[1]) % 12;
+    if (match[3].toUpperCase() === "PM") hour += 12;
+    const startMins = hour * 60 + Number(match[2]);
+    const endMins = startMins + durationMins;
+    return `${toGcalStamp(date, hour, Number(match[2]))}/${toGcalStamp(date, Math.floor(endMins / 60), endMins % 60)}`;
+  };
+  const buildGcalUrl = ({ title, details, dates, guests }) => {
+    const params = new URLSearchParams({ action: "TEMPLATE", text: title, details, ctz: TEAM_TIMEZONE });
+    if (dates) params.set("dates", dates);
+    const guestList = (guests || []).filter(Boolean).join(",");
+    if (guestList) params.set("add", guestList);
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  };
+
   const getSlotsForDate = (host, date) => {
     const isToday = isSameDay(date, currentDate);
     const isWeekend = date.getDay() === 0 || date.getDay() === 6;
@@ -347,7 +370,6 @@
     const hostInput = document.getElementById("cal-input-host");
     const hostEmailInput = document.getElementById("cal-input-host-email");
     const ccInput = document.getElementById("cal-input-cc");
-    const replyToInput = document.getElementById("cal-input-replyto");
 
     const host = teamData[selectedHost] || teamData.Neal;
     if (btn) {
@@ -358,7 +380,6 @@
     }
     if (hostInput) hostInput.value = selectedHost;
     if (hostEmailInput) hostEmailInput.value = host.email;
-    if (replyToInput) replyToInput.value = host.email;
     // Only bob@ is verified with FormSubmit, so keep it as the delivery endpoint and
     // CC everyone else (host included) - CC recipients don't need separate activation.
     if (ccInput) {
@@ -437,28 +458,60 @@
       const host = teamData[selectedHost] || teamData.Neal;
       const meetingDate = document.getElementById("cal-input-date")?.value || "";
 
-      // Unique-looking Meet code per booking so each invite has its own link
-      const meetCode = `aimt-${selectedHost.toLowerCase()}-${Math.random().toString(36).slice(2, 6)}`;
-      const meetLink = `https://meet.google.com/${meetCode}`;
-      const meetLinkInput = document.getElementById("cal-input-meet-link");
-      if (meetLinkInput) meetLinkInput.value = meetLink;
-
-      const eventTitle = `AImagineThat AI Review with ${selectedHost}`;
-      const eventDetails = `Google Meet 1:1 Architecture Review session with ${selectedHost} (${host.role}).\nJoin: ${meetLink}`;
-      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(meetLink)}`;
-
       const formData = new FormData(calBookingForm);
       const data = Object.fromEntries(formData.entries());
+      const attendeeName = String(data.name || "").trim();
+      const attendeeEmail = String(data.email || "").trim();
+      const slotDates = getSlotRange(selectedDate, selectedTimeSlot);
+      const whenText = `${meetingDate} at ${selectedTimeSlot} ${TEAM_TIMEZONE_LABEL}`;
+
+      // Saving this event from the attendee's Google Calendar emails an invite to the host,
+      // which is what puts the meeting on the host's calendar.
+      const gcalUrl = buildGcalUrl({
+        title: `AImagineThat AI Review with ${selectedHost}`,
+        details: `30-min Google Meet architecture review with ${selectedHost} (${host.role}).\nBooked by: ${attendeeName} <${attendeeEmail}>`,
+        dates: slotDates,
+        guests: [host.email],
+      });
+      // Backup link for the host in the notification email, with the attendee pre-added as guest.
+      const hostGcalUrl = buildGcalUrl({
+        title: `AImagineThat AI Review: ${attendeeName} with ${selectedHost}`,
+        details: `30-min Google Meet architecture review booked from aimaginethat.com.\nAttendee: ${attendeeName} <${attendeeEmail}>`,
+        dates: slotDates,
+        guests: [attendeeEmail],
+      });
+      const meetingLinkNote = `${selectedHost} will send the Google Meet link in the calendar invite`;
 
       data._template = "table";
       data._captcha = "false";
+      data._subject = `New booking: ${attendeeName} (${attendeeEmail}) with ${selectedHost} - ${whenText}`;
+      data._replyto = attendeeEmail;
+      data.Booked_By_Name = attendeeName;
+      data.Booked_By_Email = attendeeEmail;
       data.Meeting_Host = selectedHost;
       data.Meeting_Host_Email = host.email;
       data.Meeting_Date = meetingDate;
-      data.Meeting_Time = selectedTimeSlot;
-      data.Google_Meet_Link = meetLink;
+      data.Meeting_Time = `${selectedTimeSlot} ${TEAM_TIMEZONE_LABEL}`;
+      data.Google_Meet_Link = meetingLinkNote;
+      data.Add_To_Host_Calendar = hostGcalUrl;
       // FormSubmit auto-replies this message straight to the attendee's own email
-      data._autoresponse = `Hi ${data.name},\n\nYour 30-min Google Meet with ${selectedHost} (${host.role}) is confirmed.\n\nDate: ${meetingDate}\nTime: ${selectedTimeSlot}\nGoogle Meet link: ${meetLink}\n\nAdd it to your calendar: ${gcalUrl}\n\n— AImagineThat Team`;
+      data._autoresponse = `Hi ${attendeeName},\n\nYour 30-min Google Meet with ${selectedHost} (${host.role}) is requested for ${whenText}.\n\nPlease save the event to your Google Calendar so ${selectedHost} receives the invite: ${gcalUrl}\n\n${meetingLinkNote}.\n\n— AImagineThat Team`;
+
+      // Keep the plain-form fallback in sync with the AJAX payload.
+      ["_subject", "_replyto", "_autoresponse", "Google_Meet_Link", "Meeting_Time"].forEach((name) => {
+        const input = calBookingForm.querySelector(`[name="${name}"]`);
+        if (input) input.value = data[name];
+      });
+      ["Booked_By_Name", "Booked_By_Email", "Add_To_Host_Calendar"].forEach((name) => {
+        let input = calBookingForm.querySelector(`[name="${name}"]`);
+        if (!input) {
+          input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          calBookingForm.appendChild(input);
+        }
+        input.value = data[name];
+      });
 
       // Mark this slot busy immediately so it can no longer be double-booked
       addBooking(selectedHost, getDateKey(selectedDate), selectedTimeSlot);
@@ -495,11 +548,11 @@
 
       if (detailsEl) {
         detailsEl.innerHTML = `
-          <div><b>Host:</b> ${selectedHost} (${host.role})</div>
-          <div><b>Date:</b> ${meetingDate}</div>
-          <div><b>Time:</b> ${selectedTimeSlot} (30 mins)</div>
-          <div><b>Attendee:</b> ${data.name} (${data.email})</div>
-          <div style="color: var(--cyan); margin-top: 4px;"><b>Google Meet:</b> <a href="${meetLink}" target="_blank" rel="noopener noreferrer">${meetLink}</a></div>
+          <div><b>Host:</b> ${escapeHtml(selectedHost)} (${escapeHtml(host.role)})</div>
+          <div><b>Date:</b> ${escapeHtml(meetingDate)}</div>
+          <div><b>Time:</b> ${escapeHtml(selectedTimeSlot)} ${TEAM_TIMEZONE_LABEL} (30 mins)</div>
+          <div><b>Attendee:</b> ${escapeHtml(attendeeName)} (${escapeHtml(attendeeEmail)})</div>
+          <div style="color: var(--cyan); margin-top: 4px;"><b>Google Meet:</b> ${escapeHtml(meetingLinkNote)}</div>
         `;
       }
       if (gcalBtn) gcalBtn.href = gcalUrl;
