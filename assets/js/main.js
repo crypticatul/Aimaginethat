@@ -614,6 +614,18 @@
 
       let mode = "crm";
       let gcalUrl = "";
+      // CRM booked it but couldn't write to the host's Google Calendar (it emailed an
+      // .ics instead). Saving the event from the visitor's Google Calendar sends the host
+      // a real Google invite, which reliably lands on the host's calendar.
+      const needsCalendarInvite = !outcome.unreachable && outcome.result?.calendar !== "google";
+      if (needsCalendarInvite) {
+        gcalUrl = buildGcalUrl({
+          title: `AImagineThat AI Review with ${hostName}`,
+          details: `30-min Google Meet architecture review with ${hostName} (${host.role}).\nBooked by: ${attendeeName} <${attendeeEmail}>`,
+          dates: getSlotRange(bookedDate, bookedSlot),
+          guests: [host.email]
+        });
+      }
       if (outcome.unreachable) {
         // CRM unavailable: email the selected host directly, and send the admin copy separately.
         mode = "fallback";
@@ -670,7 +682,9 @@
       if (titleEl) titleEl.textContent = mode === "crm" ? "Meeting Booked!" : "Meeting Requested!";
       if (messageEl) {
         messageEl.textContent = mode === "crm"
-          ? `The meeting is booked with ${hostName}. A calendar invite has been sent to ${attendeeEmail}.`
+          ? needsCalendarInvite
+            ? `The meeting is booked with ${hostName}. Tap "Save Event & Invite Host" so it is added to your and ${hostName}'s Google Calendar.`
+            : `The meeting is booked with ${hostName}. A calendar invite has been sent to ${attendeeEmail}.`
           : `${hostName} has your details. Add the event to your Google Calendar so ${hostName} receives the invite.`;
       }
       if (detailsEl) {
@@ -687,8 +701,8 @@
         `;
       }
       if (gcalBtn) {
-        gcalBtn.style.display = mode === "fallback" ? "" : "none";
-        if (mode === "fallback") gcalBtn.href = gcalUrl;
+        gcalBtn.style.display = gcalUrl ? "" : "none";
+        if (gcalUrl) gcalBtn.href = gcalUrl;
       }
       if (successCard) successCard.style.display = "flex";
     });
