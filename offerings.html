@@ -226,11 +226,8 @@
           <h2 class="section__title section__title--left" id="contact-title">Need custom packaging across modules?</h2>
           <p>Tell us your monthly volume, team size, and workflows. We will map your plan with clear entitlement and rollout recommendations.</p>
         </div>
-        <form class="contact__form" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
-          <input type="hidden" name="_cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
-          <input type="hidden" name="_subject" value="New Pricing Review Request - AImagineThat Website" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_captcha" value="false" />
+        <form class="contact__form contact__form--inquiry" data-page="offerings" novalidate>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
           <div class="form__row">
             <label>Full name<input type="text" name="name" required placeholder="Jane Doe" /></label>
             <label>Work email<input type="email" name="email" required placeholder="jane@company.com" /></label>
@@ -241,6 +238,14 @@
               <option>Starter CRM</option>
               <option>Growth CRM</option>
               <option>Scale CRM</option>
+            </select>
+          </label>
+          <label>Send to
+            <select name="host" required>
+              <option value="">Choose a team member</option>
+              <option value="neal">Neal · Solutions Lead</option>
+              <option value="pummy">Pummy · Customer Solutions &amp; AI</option>
+              <option value="bob">Bob · Enterprise Growth</option>
             </select>
           </label>
           <label>Notes<textarea name="message" rows="4" placeholder="Share your workflow volume and priorities"></textarea></label>

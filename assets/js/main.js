@@ -123,12 +123,18 @@
   }
 
   /* ---------- Contact & Google Workspace Real-Time Calendar Scheduler ---------- */
-  const RECIPIENT_EMAIL = "bob@aimaginethat.com";
-  const CC_EMAILS = "neal@aimaginethat.com,pummy@aimaginethat.com";
+  // Bookings and inquiries go to the CRM, which emails only the selected team member
+  // (plus a hidden copy for the admin) and books the host's own Google Calendar.
+  const CRM_API_BASE = String(window.AIMT_CRM_API_BASE || "https://app.aimaginethat.com").replace(/\/$/, "");
+  // Used only if the CRM can't be reached: a separate submission per recipient,
+  // so neither the host nor the visitor ever sees the admin copy.
+  const FALLBACK_COPY_EMAIL = "atul@aimaginethat.com";
+  const formSubmitEndpoint = (email) => `https://formsubmit.co/ajax/${email}`;
 
   // Team Schedule Data
   const teamData = {
     Neal: {
+      key: "neal",
       name: "Neal",
       email: "neal@aimaginethat.com",
       role: "Solutions Lead",
@@ -139,6 +145,7 @@
       }
     },
     Pummy: {
+      key: "pummy",
       name: "Pummy",
       email: "pummy@aimaginethat.com",
       role: "Customer Solutions & AI",
@@ -149,6 +156,7 @@
       }
     },
     Bob: {
+      key: "bob",
       name: "Bob",
       email: "bob@aimaginethat.com",
       role: "Enterprise Growth",
@@ -159,11 +167,22 @@
       }
     }
   };
+  const hostByKey = (key) => Object.values(teamData).find((h) => h.key === key);
 
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // Live bookings persisted locally so slot/host availability reacts to real scheduling
+  const newRequestId = () => {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+  };
+
+  // Slots booked from this browser, so they disable instantly even before the CRM refreshes.
   const BOOKINGS_KEY = "aimt_bookings_v1";
   const loadBookings = () => {
     try {
@@ -172,9 +191,14 @@
       return [];
     }
   };
-  const saveBookings = (list) => localStorage.setItem(BOOKINGS_KEY, JSON.stringify(list));
+  const saveBookings = (list) => {
+    try {
+      localStorage.setItem(BOOKINGS_KEY, JSON.stringify(list));
+    } catch {
+      /* storage unavailable */
+    }
+  };
   const getDateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-  const isSlotBooked = (host, dateKey, time) => loadBookings().some((b) => b.host === host && b.dateKey === dateKey && b.time === time);
   const addBooking = (host, dateKey, time) => {
     const list = loadBookings();
     list.push({ host, dateKey, time });
@@ -186,14 +210,39 @@
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const toGcalStamp = (date, h, m) =>
     `${getDateKey(date).replace(/-/g, "")}T${String(h).padStart(2, "0")}${String(m).padStart(2, "0")}00`;
-  const getSlotRange = (date, slot, durationMins = 30) => {
+  const parseSlot = (slot) => {
     const match = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(String(slot).trim());
-    if (!match) return "";
+    if (!match) return null;
     let hour = Number(match[1]) % 12;
     if (match[3].toUpperCase() === "PM") hour += 12;
-    const startMins = hour * 60 + Number(match[2]);
+    return { hour, minute: Number(match[2]) };
+  };
+  const to24h = (slot) => {
+    const parsed = parseSlot(slot);
+    return parsed ? `${String(parsed.hour).padStart(2, "0")}:${String(parsed.minute).padStart(2, "0")}` : "";
+  };
+  const getSlotRange = (date, slot, durationMins = 30) => {
+    const parsed = parseSlot(slot);
+    if (!parsed) return "";
+    const startMins = parsed.hour * 60 + parsed.minute;
     const endMins = startMins + durationMins;
-    return `${toGcalStamp(date, hour, Number(match[2]))}/${toGcalStamp(date, Math.floor(endMins / 60), endMins % 60)}`;
+    return `${toGcalStamp(date, parsed.hour, parsed.minute)}/${toGcalStamp(date, Math.floor(endMins / 60), endMins % 60)}`;
+  };
+  // Wall-clock slot in the team timezone -> epoch ms (handles daylight saving).
+  const tzOffsetMs = (instant) => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: TEAM_TIMEZONE, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit"
+    }).formatToParts(new Date(instant));
+    const get = (type) => Number(parts.find((p) => p.type === type).value);
+    return Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second")) - instant;
+  };
+  const slotStartMs = (date, slot) => {
+    const parsed = parseSlot(slot);
+    if (!parsed) return NaN;
+    const wall = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), parsed.hour, parsed.minute);
+    const first = wall - tzOffsetMs(wall);
+    return wall - tzOffsetMs(first);
   };
   const buildGcalUrl = ({ title, details, dates, guests }) => {
     const params = new URLSearchParams({ action: "TEMPLATE", text: title, details, ctz: TEAM_TIMEZONE });
@@ -201,6 +250,38 @@
     const guestList = (guests || []).filter(Boolean).join(",");
     if (guestList) params.set("add", guestList);
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  };
+
+  // Live busy ranges from each host's Google Calendar, via the CRM.
+  const remoteBusy = new Map();
+  const pendingBusy = new Map();
+  const fetchBusy = (hostName, date) => {
+    const host = teamData[hostName];
+    const dateKey = getDateKey(date);
+    const cacheKey = `${hostName}|${dateKey}`;
+    if (!host || remoteBusy.has(cacheKey)) return Promise.resolve();
+    if (pendingBusy.has(cacheKey)) return pendingBusy.get(cacheKey);
+    const request = fetch(`${CRM_API_BASE}/api/public/website-booking/availability?host=${host.key}&date=${dateKey}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const busy = data && Array.isArray(data.busy)
+          ? data.busy.map((b) => ({ start: Date.parse(b.start), end: Date.parse(b.end) })).filter((b) => b.start < b.end)
+          : [];
+        remoteBusy.set(cacheKey, busy);
+      })
+      .catch(() => remoteBusy.set(cacheKey, []))
+      .finally(() => pendingBusy.delete(cacheKey));
+    pendingBusy.set(cacheKey, request);
+    return request;
+  };
+
+  const isSlotBooked = (hostName, date, time) => {
+    const dateKey = getDateKey(date);
+    if (loadBookings().some((b) => b.host === hostName && b.dateKey === dateKey && b.time === time)) return true;
+    const start = slotStartMs(date, time);
+    if (!Number.isFinite(start) || start < Date.now() + 15 * 60_000) return true;
+    const end = start + 30 * 60_000;
+    return (remoteBusy.get(`${hostName}|${dateKey}`) || []).some((b) => b.start < end && b.end > start);
   };
 
   const getSlotsForDate = (host, date) => {
@@ -213,7 +294,6 @@
 
   // Reflects real bookings: a host shows Busy only once every slot for the day is taken
   const updateTeamChipsAvailability = () => {
-    const todayKey = getDateKey(currentDate);
     hostChips.forEach((chip) => {
       const name = chip.dataset.name;
       const host = teamData[name];
@@ -221,7 +301,7 @@
       if (!host || !tagEl) return;
 
       const todaySlots = getSlotsForDate(host, currentDate);
-      const freeCount = todaySlots.filter((t) => !isSlotBooked(name, todayKey, t)).length;
+      const freeCount = todaySlots.filter((t) => !isSlotBooked(name, currentDate, t)).length;
 
       if (todaySlots.length === 0 || freeCount === 0) {
         tagEl.textContent = "🔴 Busy Today";
@@ -327,26 +407,36 @@
 
     const host = teamData[selectedHost] || teamData.Neal;
     const slots = getSlotsForDate(host, selectedDate);
-    const dateKey = getDateKey(selectedDate);
+
+    const busyKey = `${selectedHost}|${getDateKey(selectedDate)}`;
+    if (!remoteBusy.has(busyKey)) {
+      const forHost = selectedHost;
+      const forDate = selectedDate;
+      fetchBusy(forHost, forDate).then(() => {
+        if (selectedHost === forHost && isSameDay(selectedDate, forDate)) renderTimeSlots();
+      });
+    }
 
     slotsContainer.innerHTML = "";
     if (!slots || slots.length === 0) {
       slotsContainer.innerHTML = `<p style="grid-column: 1/-1; font-size: 12px; color: var(--text-dim); text-align: center; padding: 6px;">No slots available on this date.</p>`;
       selectedTimeSlot = "";
+      updateConfirmButtonText();
       return;
     }
 
-    const firstFreeSlot = slots.find((slot) => !isSlotBooked(selectedHost, dateKey, slot));
+    const keepCurrent = selectedTimeSlot && slots.includes(selectedTimeSlot) && !isSlotBooked(selectedHost, selectedDate, selectedTimeSlot);
+    const firstFreeSlot = keepCurrent ? selectedTimeSlot : slots.find((slot) => !isSlotBooked(selectedHost, selectedDate, slot));
 
     slots.forEach((slot) => {
-      const booked = isSlotBooked(selectedHost, dateKey, slot);
+      const booked = isSlotBooked(selectedHost, selectedDate, slot);
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "cal-slot-btn" + (booked ? " is-busy" : slot === firstFreeSlot ? " is-selected" : "");
       btn.textContent = booked ? `${slot} · Busy` : slot;
       if (booked) {
         btn.disabled = true;
-        btn.title = "Already booked for this slot";
+        btn.title = "Not available";
       } else {
         btn.addEventListener("click", () => {
           document.querySelectorAll("#cal-slots-container .cal-slot-btn").forEach(s => s.classList.remove("is-selected"));
@@ -359,6 +449,13 @@
       slotsContainer.appendChild(btn);
     });
 
+    if (!firstFreeSlot) {
+      const note = document.createElement("p");
+      note.style.cssText = "grid-column: 1/-1; font-size: 12px; color: var(--text-dim); text-align: center; padding: 6px;";
+      note.textContent = "All slots are taken on this date. Please pick another day.";
+      slotsContainer.appendChild(note);
+    }
+
     selectedTimeSlot = firstFreeSlot || "";
     if (inputTime) inputTime.value = selectedTimeSlot;
     updateConfirmButtonText();
@@ -366,27 +463,10 @@
 
   const updateConfirmButtonText = () => {
     const btn = document.getElementById("cal-confirm-btn");
-    const subject = document.getElementById("cal-form-subject");
-    const hostInput = document.getElementById("cal-input-host");
-    const hostEmailInput = document.getElementById("cal-input-host-email");
-    const ccInput = document.getElementById("cal-input-cc");
-
-    const host = teamData[selectedHost] || teamData.Neal;
-    if (btn) {
-      btn.innerHTML = `Schedule with ${selectedHost} (${selectedTimeSlot}) <span aria-hidden="true">→</span>`;
-    }
-    if (subject) {
-      subject.value = `New Google Meet Scheduled with ${selectedHost} for ${document.getElementById("cal-input-date")?.value || ""} at ${selectedTimeSlot}`;
-    }
-    if (hostInput) hostInput.value = selectedHost;
-    if (hostEmailInput) hostEmailInput.value = host.email;
-    // Only bob@ is verified with FormSubmit, so keep it as the delivery endpoint and
-    // CC everyone else (host included) - CC recipients don't need separate activation.
-    if (ccInput) {
-      ccInput.value = Object.values(teamData)
-        .map((h) => h.email)
-        .filter((email) => email !== RECIPIENT_EMAIL)
-        .join(",");
+    if (btn && !btn.disabled) {
+      btn.innerHTML = selectedTimeSlot
+        ? `Schedule with ${escapeHtml(selectedHost)} (${escapeHtml(selectedTimeSlot)} ${TEAM_TIMEZONE_LABEL}) <span aria-hidden="true">→</span>`
+        : `Pick an available time <span aria-hidden="true">→</span>`;
     }
   };
 
@@ -426,9 +506,49 @@
   });
 
   // Initialize Calendar & Slots
-  renderCalendar();
-  renderTimeSlots();
-  updateTeamChipsAvailability();
+  if (document.getElementById("calendar-booking-widget")) {
+    renderCalendar();
+    renderTimeSlots();
+    updateTeamChipsAvailability();
+    Promise.all(Object.keys(teamData).map((name) => fetchBusy(name, currentDate))).then(() => {
+      updateTeamChipsAvailability();
+      renderTimeSlots();
+    });
+  }
+
+  // Posts JSON to the CRM. Returns { ok, result } on success, { rejected, error, status }
+  // for a definite validation/conflict answer, or { unreachable } when a fallback is needed.
+  const postToCrm = async (path, payload) => {
+    try {
+      const res = await fetch(`${CRM_API_BASE}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => null);
+      if (res.ok && result && result.ok) return { ok: true, result };
+      if ([400, 409, 429].includes(res.status) && result && result.error) {
+        return { rejected: true, status: res.status, error: result.error };
+      }
+      return { unreachable: true };
+    } catch {
+      return { unreachable: true };
+    }
+  };
+
+  const sendViaFormSubmit = async (email, data) => {
+    try {
+      const res = await fetch(formSubmitEndpoint(email), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ _template: "table", _captcha: "false", ...data })
+      });
+      const result = await res.json().catch(() => null);
+      return Boolean(res.ok && result && result.success !== false && result.success !== "false");
+    } catch {
+      return false;
+    }
+  };
 
   // Booking Form Submission
   const calBookingForm = document.getElementById("gw-cal-booking-form");
@@ -453,109 +573,123 @@
 
       const confirmBtn = document.getElementById("cal-confirm-btn");
       confirmBtn.disabled = true;
-      confirmBtn.innerHTML = `Confirming Google Meet...`;
+      confirmBtn.innerHTML = `Booking your Google Meet...`;
 
-      const host = teamData[selectedHost] || teamData.Neal;
+      const hostName = selectedHost;
+      const host = teamData[hostName] || teamData.Neal;
+      const bookedDate = selectedDate;
+      const bookedSlot = selectedTimeSlot;
       const meetingDate = document.getElementById("cal-input-date")?.value || "";
-
       const formData = new FormData(calBookingForm);
-      const data = Object.fromEntries(formData.entries());
-      const attendeeName = String(data.name || "").trim();
-      const attendeeEmail = String(data.email || "").trim();
-      const slotDates = getSlotRange(selectedDate, selectedTimeSlot);
-      const whenText = `${meetingDate} at ${selectedTimeSlot} ${TEAM_TIMEZONE_LABEL}`;
+      const attendeeName = String(formData.get("name") || "").trim();
+      const attendeeEmail = String(formData.get("email") || "").trim();
+      const whenText = `${meetingDate} at ${bookedSlot} ${TEAM_TIMEZONE_LABEL}`;
 
-      // Saving this event from the attendee's Google Calendar emails an invite to the host,
-      // which is what puts the meeting on the host's calendar.
-      const gcalUrl = buildGcalUrl({
-        title: `AImagineThat AI Review with ${selectedHost}`,
-        details: `30-min Google Meet architecture review with ${selectedHost} (${host.role}).\nBooked by: ${attendeeName} <${attendeeEmail}>`,
-        dates: slotDates,
-        guests: [host.email],
+      const outcome = await postToCrm("/api/public/website-booking", {
+        requestId: newRequestId(),
+        host: host.key,
+        name: attendeeName,
+        email: attendeeEmail,
+        date: getDateKey(bookedDate),
+        time: to24h(bookedSlot),
+        website: String(formData.get("website") || "")
       });
-      // Backup link for the host in the notification email, with the attendee pre-added as guest.
-      const hostGcalUrl = buildGcalUrl({
-        title: `AImagineThat AI Review: ${attendeeName} with ${selectedHost}`,
-        details: `30-min Google Meet architecture review booked from aimaginethat.com.\nAttendee: ${attendeeName} <${attendeeEmail}>`,
-        dates: slotDates,
-        guests: [attendeeEmail],
-      });
-      const meetingLinkNote = `${selectedHost} will send the Google Meet link in the calendar invite`;
 
-      data._template = "table";
-      data._captcha = "false";
-      data._subject = `New booking: ${attendeeName} (${attendeeEmail}) with ${selectedHost} - ${whenText}`;
-      data._replyto = attendeeEmail;
-      data.Booked_By_Name = attendeeName;
-      data.Booked_By_Email = attendeeEmail;
-      data.Meeting_Host = selectedHost;
-      data.Meeting_Host_Email = host.email;
-      data.Meeting_Date = meetingDate;
-      data.Meeting_Time = `${selectedTimeSlot} ${TEAM_TIMEZONE_LABEL}`;
-      data.Google_Meet_Link = meetingLinkNote;
-      data.Add_To_Host_Calendar = hostGcalUrl;
-      // FormSubmit auto-replies this message straight to the attendee's own email
-      data._autoresponse = `Hi ${attendeeName},\n\nYour 30-min Google Meet with ${selectedHost} (${host.role}) is requested for ${whenText}.\n\nPlease save the event to your Google Calendar so ${selectedHost} receives the invite: ${gcalUrl}\n\n${meetingLinkNote}.\n\n— AImagineThat Team`;
+      const restoreButton = () => {
+        confirmBtn.disabled = false;
+        updateConfirmButtonText();
+      };
 
-      // Keep the plain-form fallback in sync with the AJAX payload.
-      ["_subject", "_replyto", "_autoresponse", "Google_Meet_Link", "Meeting_Time"].forEach((name) => {
-        const input = calBookingForm.querySelector(`[name="${name}"]`);
-        if (input) input.value = data[name];
-      });
-      ["Booked_By_Name", "Booked_By_Email", "Add_To_Host_Calendar"].forEach((name) => {
-        let input = calBookingForm.querySelector(`[name="${name}"]`);
-        if (!input) {
-          input = document.createElement("input");
-          input.type = "hidden";
-          input.name = name;
-          calBookingForm.appendChild(input);
+      if (outcome.rejected) {
+        if (outcome.status === 409) {
+          addBooking(hostName, getDateKey(bookedDate), bookedSlot);
+          remoteBusy.delete(`${hostName}|${getDateKey(bookedDate)}`);
+          renderTimeSlots();
+          updateTeamChipsAvailability();
         }
-        input.value = data[name];
-      });
-
-      // Mark this slot busy immediately so it can no longer be double-booked
-      addBooking(selectedHost, getDateKey(selectedDate), selectedTimeSlot);
-      updateTeamChipsAvailability();
-
-      try {
-        // Always post through the verified bob@ endpoint; host + rest of team are CC'd
-        const response = await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-        const result = await response.json().catch(() => null);
-        if (!response.ok || !result || result.success === false || result.success === "false") {
-          throw new Error("FormSubmit rejected the AJAX request: " + JSON.stringify(result));
-        }
-      } catch (err) {
-        console.warn("AJAX calendar booking failed, falling back to direct form submit:", err);
-        window.open(gcalUrl, "_blank", "noopener,noreferrer");
-        calBookingForm.submit();
+        restoreButton();
+        alert(outcome.error);
         return;
       }
 
-      // Open the host's Google Calendar "add event" screen automatically
-      window.open(gcalUrl, "_blank", "noopener,noreferrer");
+      let mode = "crm";
+      let gcalUrl = "";
+      if (outcome.unreachable) {
+        // CRM unavailable: email the selected host directly, and send the admin copy separately.
+        mode = "fallback";
+        const slotDates = getSlotRange(bookedDate, bookedSlot);
+        gcalUrl = buildGcalUrl({
+          title: `AImagineThat AI Review with ${hostName}`,
+          details: `30-min Google Meet architecture review with ${hostName} (${host.role}).\nBooked by: ${attendeeName} <${attendeeEmail}>`,
+          dates: slotDates,
+          guests: [host.email]
+        });
+        const details = {
+          Booked_By_Name: attendeeName,
+          Booked_By_Email: attendeeEmail,
+          Meeting_Host: hostName,
+          Meeting_Date: meetingDate,
+          Meeting_Time: `${bookedSlot} ${TEAM_TIMEZONE_LABEL}`,
+          Platform: "Google Meet (30 Mins)"
+        };
+        const hostSent = await sendViaFormSubmit(host.email, {
+          ...details,
+          _subject: `New booking: ${attendeeName} (${attendeeEmail}) with ${hostName} - ${whenText}`,
+          _replyto: attendeeEmail,
+          Add_To_My_Calendar: buildGcalUrl({
+            title: `AImagineThat AI Review: ${attendeeName} with ${hostName}`,
+            details: `30-min Google Meet architecture review booked from aimaginethat.com.\nAttendee: ${attendeeName} <${attendeeEmail}>`,
+            dates: slotDates,
+            guests: [attendeeEmail]
+          }),
+          _autoresponse: `Hi ${attendeeName},\n\nYour 30-min Google Meet with ${hostName} (${host.role}) is requested for ${whenText}.\n\nAdd it to your Google Calendar here (this also invites ${hostName}): ${gcalUrl}\n\n${hostName} will send the Google Meet link in the calendar invite.\n\n— AImagineThat Team`
+        });
+        const copySent = await sendViaFormSubmit(FALLBACK_COPY_EMAIL, {
+          ...details,
+          _subject: `New booking: ${attendeeName} with ${hostName} - ${whenText}`
+        });
+        if (!hostSent && !copySent) {
+          restoreButton();
+          alert("We couldn't book your meeting right now. Please try again in a minute or email us directly.");
+          return;
+        }
+      }
+
+      addBooking(hostName, getDateKey(bookedDate), bookedSlot);
+      remoteBusy.delete(`${hostName}|${getDateKey(bookedDate)}`);
+      updateTeamChipsAvailability();
 
       calBookingForm.style.display = "none";
       const successCard = document.getElementById("cal-booked-success");
+      const titleEl = document.getElementById("cal-success-title");
+      const messageEl = document.getElementById("cal-success-message");
       const detailsEl = document.getElementById("cal-success-details");
       const gcalBtn = document.getElementById("cal-gcal-link-btn");
+      const meetLink = mode === "crm" ? outcome.result.meetLink : null;
 
+      if (titleEl) titleEl.textContent = mode === "crm" ? "Meeting Booked!" : "Meeting Requested!";
+      if (messageEl) {
+        messageEl.textContent = mode === "crm"
+          ? `The meeting is booked with ${hostName}. A calendar invite has been sent to ${attendeeEmail}.`
+          : `${hostName} has your details. Add the event to your Google Calendar so ${hostName} receives the invite.`;
+      }
       if (detailsEl) {
         detailsEl.innerHTML = `
-          <div><b>Host:</b> ${escapeHtml(selectedHost)} (${escapeHtml(host.role)})</div>
+          <div><b>Host:</b> ${escapeHtml(hostName)} (${escapeHtml(host.role)})</div>
           <div><b>Date:</b> ${escapeHtml(meetingDate)}</div>
-          <div><b>Time:</b> ${escapeHtml(selectedTimeSlot)} ${TEAM_TIMEZONE_LABEL} (30 mins)</div>
+          <div><b>Time:</b> ${escapeHtml(bookedSlot)} ${TEAM_TIMEZONE_LABEL} (30 mins)</div>
           <div><b>Attendee:</b> ${escapeHtml(attendeeName)} (${escapeHtml(attendeeEmail)})</div>
-          <div style="color: var(--cyan); margin-top: 4px;"><b>Google Meet:</b> ${escapeHtml(meetingLinkNote)}</div>
+          <div style="color: var(--cyan); margin-top: 4px;"><b>Google Meet:</b> ${
+            meetLink && /^https:\/\//.test(meetLink)
+              ? `<a href="${escapeHtml(meetLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(meetLink)}</a>`
+              : `Link will be in your calendar invite`
+          }</div>
         `;
       }
-      if (gcalBtn) gcalBtn.href = gcalUrl;
+      if (gcalBtn) {
+        gcalBtn.style.display = mode === "fallback" ? "" : "none";
+        if (mode === "fallback") gcalBtn.href = gcalUrl;
+      }
       if (successCard) successCard.style.display = "flex";
     });
 
@@ -572,8 +706,8 @@
     }
   }
 
-  /* ---------- Left Column Inquiry Form: send to team emails via AJAX ---------- */
-  const inquiryForms = document.querySelectorAll(".contact__form--inquiry, .section.contact > .container > .contact__form");
+  /* ---------- Inquiry Forms: send only to the selected team member ---------- */
+  const inquiryForms = document.querySelectorAll(".contact__form--inquiry");
   inquiryForms.forEach((form) => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -592,50 +726,67 @@
       const btn = form.querySelector("button[type=submit]");
       const originalText = btn.innerHTML;
       btn.disabled = true;
+      btn.classList.remove("is-success");
       btn.innerHTML = `Sending inquiry...`;
 
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const field = (name) => String(formData.get(name) || "").trim();
+      const host = hostByKey(field("host"));
+      const page = form.dataset.page === "offerings" ? "offerings" : "home";
+      const label = page === "offerings" ? "Pricing Review Request" : "Inquiry";
 
-      data._cc = CC_EMAILS;
-      data._subject = data._subject || `New Inquiry from ${data.name || data.email || "Website Visitor"}`;
-      data._template = data._template || "table";
-      data._captcha = "false";
+      const fail = (message) => {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        alert(message);
+      };
+      if (!host) {
+        fail("Please choose who you'd like to talk to.");
+        return;
+      }
 
-      try {
-        const actionAttr = form.getAttribute("action") || "";
-        const endpoint = actionAttr.startsWith("http")
-          ? (actionAttr.includes("/ajax/") ? actionAttr : actionAttr.replace("https://formsubmit.co/", "https://formsubmit.co/ajax/"))
-          : `https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`;
+      const outcome = await postToCrm("/api/public/website-inquiry", {
+        requestId: newRequestId(),
+        host: host.key,
+        name: field("name"),
+        email: field("email"),
+        company: field("company"),
+        plan: field("plan"),
+        message: field("message"),
+        page,
+        website: field("website")
+      });
 
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-
-        const result = await response.json().catch(() => null);
-        if (response.ok && result && result.success !== false && result.success !== "false") {
-          btn.classList.add("is-success");
-          btn.innerHTML = "✓ Inquiry sent to all 4 emails!";
-          form.reset();
-        } else {
-          throw new Error("FormSubmit rejected the AJAX request: " + JSON.stringify(result));
-        }
-      } catch (err) {
-        console.warn("AJAX form submission fallback:", err);
-        try {
-          form.submit();
-        } catch (submitErr) {
-          btn.classList.remove("is-success");
-          btn.disabled = false;
-          btn.innerHTML = originalText;
-          alert("Unable to send inquiry automatically. Please email us directly at hello@aimaginethat.com");
+      if (outcome.rejected) {
+        fail(outcome.error);
+        return;
+      }
+      if (outcome.unreachable) {
+        const details = {
+          Name: field("name"),
+          Email: field("email"),
+          Company: field("company"),
+          Plan: field("plan"),
+          Message: field("message"),
+          Sent_To: host.name
+        };
+        const subject = `New ${label} from ${field("name") || field("email")}`;
+        const hostSent = await sendViaFormSubmit(host.email, { ...details, _subject: subject, _replyto: field("email") });
+        const copySent = await sendViaFormSubmit(FALLBACK_COPY_EMAIL, { ...details, _subject: `${subject} (for ${host.name})` });
+        if (!hostSent && !copySent) {
+          fail("Unable to send inquiry automatically. Please email us directly at hello@aimaginethat.com");
+          return;
         }
       }
+
+      btn.classList.add("is-success");
+      btn.innerHTML = `✓ Inquiry sent to ${escapeHtml(host.name)}!`;
+      form.reset();
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.classList.remove("is-success");
+        btn.innerHTML = originalText;
+      }, 6000);
     });
   });
 })();

@@ -880,12 +880,9 @@
           </h2>
           <p>Tell us about your pipeline, or schedule a live 30-minute Google Meet consultation directly from our real-time team calendar on the right.</p>
 
-          <form class="contact__form contact__form--inquiry" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
-            <input type="hidden" name="_cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
-            <input type="hidden" name="_subject" value="New Inquiry - AImagineThat Website" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            
+          <form class="contact__form contact__form--inquiry" data-page="home" novalidate>
+            <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+
             <div style="font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px;">
               ✉️ Quick Inquiry Form
             </div>
@@ -906,9 +903,17 @@
                 </select>
               </label>
             </div>
+            <label>Send to
+              <select name="host" required>
+                <option value="">Choose a team member</option>
+                <option value="neal">Neal · Solutions Lead</option>
+                <option value="pummy">Pummy · Customer Solutions &amp; AI</option>
+                <option value="bob">Bob · Enterprise Growth</option>
+              </select>
+            </label>
             <label>Enter your query?<textarea name="message" rows="3" placeholder="e.g. I want to automate inbound lead calls, appointment booking, support triage…"></textarea></label>
-            <button class="btn btn--primary btn--lg btn--block" type="submit">Send inquiry to team <span aria-hidden="true">→</span></button>
-            <p class="form__note">Dispatches to bob, neal &amp; pummy · Reply &lt; 4 hours</p>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Send inquiry <span aria-hidden="true">→</span></button>
+            <p class="form__note">Goes straight to the team member you choose · Reply &lt; 4 hours</p>
           </form>
 
           <ul class="contact__perks" style="margin-top: 24px;">
@@ -1024,19 +1029,10 @@
           </div>
 
           <!-- Booking Details & Confirm Form -->
-          <form id="gw-cal-booking-form" class="cal-booking-form" action="https://formsubmit.co/bob@aimaginethat.com" method="post" novalidate>
-            <input type="hidden" name="_cc" id="cal-input-cc" value="neal@aimaginethat.com,pummy@aimaginethat.com" />
-            <input type="hidden" name="_subject" id="cal-form-subject" value="New Google Meet Scheduled with Neal" />
-            <input type="hidden" name="_replyto" id="cal-input-replyto" value="" />
-            <input type="hidden" name="_autoresponse" id="cal-input-autoresponse" value="" />
-            <input type="hidden" name="Host_Name" id="cal-input-host" value="Neal" />
-            <input type="hidden" name="Host_Email" id="cal-input-host-email" value="neal@aimaginethat.com" />
-            <input type="hidden" name="Meeting_Date" id="cal-input-date" value="Wed, 16 Sep 2026" />
-            <input type="hidden" name="Meeting_Time" id="cal-input-time" value="10:30 AM" />
-            <input type="hidden" name="Google_Meet_Link" id="cal-input-meet-link" value="Host will send the Google Meet link in the calendar invite" />
-            <input type="hidden" name="Platform" value="Google Meet (30 Mins)" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
+          <form id="gw-cal-booking-form" class="cal-booking-form" novalidate>
+            <input type="hidden" id="cal-input-date" value="" />
+            <input type="hidden" id="cal-input-time" value="" />
+            <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
 
             <div class="form__row">
               <label>Your Name<input type="text" name="name" autocomplete="name" required placeholder="Ada Lovelace" /></label>
@@ -1051,8 +1047,8 @@
           <!-- Booked Confirmation Screen -->
           <div id="cal-booked-success" class="cal-success-card" style="display: none;">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11.5 14.5 16 9.5"/></svg>
-            <h4>Meeting Requested!</h4>
-            <p>Your details have been sent to the team. Save the Google Calendar event so your host receives the invite.</p>
+            <h4 id="cal-success-title">Meeting Booked!</h4>
+            <p id="cal-success-message">Your meeting is booked. A calendar invite has been sent to your email.</p>
             <div class="cal-success-details" id="cal-success-details"></div>
             <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
               <a class="btn btn--primary btn--block" id="cal-gcal-link-btn" href="#" target="_blank" rel="noopener noreferrer">
